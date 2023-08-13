@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Infrastructure\Itmo.Dev.Asap.Core.Mapping\Itmo.Dev.Asap.Core.Mapping.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Abstractions\Itmo.Dev.Asap.Core.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Common\Itmo.Dev.Asap.Core.Application.Common.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Contracts\Itmo.Dev.Asap.Core.Application.Contracts.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application\Itmo.Dev.Asap.Core.Application.csproj" />
+        <ProjectReference Include="..\Abstractions\Itmo.Dev.Asap.Core.Application.DataAccess\Itmo.Dev.Asap.Core.Application.DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Kysect.CommonLib" />
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Tests" />
+    </ItemGroup>
+
+</Project>

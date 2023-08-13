@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Application\Abstractions\Itmo.Dev.Asap.Core.Application.DataAccess\Itmo.Dev.Asap.Core.Application.DataAccess.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.DataAccess\Itmo.Dev.Asap.Core.DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" />
+        <PackageReference Include="FluentScanning.DependencyInjection" />
+    </ItemGroup>
+
+</Project>

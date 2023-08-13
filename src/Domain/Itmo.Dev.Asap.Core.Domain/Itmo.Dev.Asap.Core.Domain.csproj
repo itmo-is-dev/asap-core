@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="RichEntity" />
+        <PackageReference Include="System.Linq.Async" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Common\Itmo.Dev.Asap.Core.Common.csproj" />
+    </ItemGroup>
+
+</Project>

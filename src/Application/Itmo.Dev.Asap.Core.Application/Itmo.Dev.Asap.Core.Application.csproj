@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="FluentChaining" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference Include="System.Linq.Async" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Domain\Itmo.Dev.Asap.Core.Domain\Itmo.Dev.Asap.Core.Domain.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\Itmo.Dev.Asap.Core.Mapping\Itmo.Dev.Asap.Core.Mapping.csproj" />
+        <ProjectReference Include="..\Abstractions\Itmo.Dev.Asap.Core.Application.DataAccess\Itmo.Dev.Asap.Core.Application.DataAccess.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Abstractions\Itmo.Dev.Asap.Core.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Common\Itmo.Dev.Asap.Core.Application.Common.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Contracts\Itmo.Dev.Asap.Core.Application.Contracts.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Dto\Itmo.Dev.Asap.Core.Application.Dto.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Specifications\Itmo.Dev.Asap.Core.Application.Specifications.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Tests" />
+    </ItemGroup>
+
+</Project>

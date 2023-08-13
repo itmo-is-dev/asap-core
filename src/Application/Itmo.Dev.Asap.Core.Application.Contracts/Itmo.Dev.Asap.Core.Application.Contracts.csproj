@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <ItemGroup>
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Dto\Itmo.Dev.Asap.Core.Application.Dto.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR.Contracts" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Controllers" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Commands" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Application" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Presentation.Services" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Presentation.SignalR" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Presentation.Grpc" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Presentation.Kafka" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Application.Handlers" />
+        <InternalsVisibleTo Include="Itmo.Dev.Asap.Core.Tests" />
+    </ItemGroup>
+
+</Project>

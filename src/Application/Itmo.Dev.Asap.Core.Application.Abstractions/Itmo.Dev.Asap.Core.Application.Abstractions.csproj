@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <ItemGroup>
+        <PackageReference Include="MediatR" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Domain\Itmo.Dev.Asap.Core.Domain\Itmo.Dev.Asap.Core.Domain.csproj" />
+        <ProjectReference Include="..\Abstractions\Itmo.Dev.Asap.Core.Application.DataAccess\Itmo.Dev.Asap.Core.Application.DataAccess.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Application.Dto\Itmo.Dev.Asap.Core.Application.Dto.csproj" />
+
+    </ItemGroup>
+
+</Project>

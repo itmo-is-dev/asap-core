@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=asap-core
+    ports:
+      - "8011:5432"
+    restart: unless-stopped
+
+networks:
+  asap-core:
+    driver: bridge

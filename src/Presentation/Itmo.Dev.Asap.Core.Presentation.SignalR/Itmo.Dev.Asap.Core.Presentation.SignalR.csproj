@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Application\Itmo.Dev.Asap.Core.Application.Abstractions\Itmo.Dev.Asap.Core.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Application\Itmo.Dev.Asap.Core.Application.Contracts\Itmo.Dev.Asap.Core.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\Domain\Itmo.Dev.Asap.Core.Common\Itmo.Dev.Asap.Core.Common.csproj" />
+    </ItemGroup>
+
+</Project>

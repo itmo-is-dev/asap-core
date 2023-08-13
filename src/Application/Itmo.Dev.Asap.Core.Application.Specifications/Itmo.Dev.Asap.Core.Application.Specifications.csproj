@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Domain\Itmo.Dev.Asap.Core.Domain\Itmo.Dev.Asap.Core.Domain.csproj" />
+      <ProjectReference Include="..\Abstractions\Itmo.Dev.Asap.Core.Application.DataAccess\Itmo.Dev.Asap.Core.Application.DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" />
+      <PackageReference Include="System.Linq.Async" />
+    </ItemGroup>
+
+</Project>

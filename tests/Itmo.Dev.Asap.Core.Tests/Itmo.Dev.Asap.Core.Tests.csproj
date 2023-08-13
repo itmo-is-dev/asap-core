@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <NoWarn>$(NoWarn);1701;1702;IL2121;CA1707;SA1633;SA1309;SA1101;SA1518;SA1502;CA1506</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Itmo.Dev.Platform.Testing" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Moq" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
+        <PackageReference Include="coverlet.collector" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="TestResults\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="TestResults\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="TestResults\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Application\Itmo.Dev.Asap.Core.Application.Abstractions\Itmo.Dev.Asap.Core.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\..\src\Application\Itmo.Dev.Asap.Core.Application.Handlers\Itmo.Dev.Asap.Core.Application.Handlers.csproj" />
+      <ProjectReference Include="..\..\src\Application\Itmo.Dev.Asap.Core.Application\Itmo.Dev.Asap.Core.Application.csproj" />
+      <ProjectReference Include="..\..\src\Infrastructure\Itmo.Dev.Asap.Core.DataAccess\Itmo.Dev.Asap.Core.DataAccess.csproj" />
+      <ProjectReference Include="..\..\src\Infrastructure\Itmo.Dev.Asap.Core.Seeding\Itmo.Dev.Asap.Core.Seeding.csproj" />
+    </ItemGroup>
+
+</Project>

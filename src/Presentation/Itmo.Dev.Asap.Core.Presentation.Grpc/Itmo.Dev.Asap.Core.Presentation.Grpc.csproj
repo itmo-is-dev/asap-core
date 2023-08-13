@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf ProtoRoot="protos" Include="protos\**\*.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Application\Itmo.Dev.Asap.Core.Application.Abstractions\Itmo.Dev.Asap.Core.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\Itmo.Dev.Asap.Core.Mapping\Itmo.Dev.Asap.Core.Mapping.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Presentation.Grpc.Contracts\Itmo.Dev.Asap.Core.Presentation.Grpc.Contracts.csproj" />
+        <ProjectReference Include="..\Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping\Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping.csproj" />
+    </ItemGroup>
+
+
+</Project>
