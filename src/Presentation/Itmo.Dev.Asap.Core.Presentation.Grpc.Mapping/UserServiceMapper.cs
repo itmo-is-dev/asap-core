@@ -10,6 +10,8 @@ namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 [Mapper]
 internal static partial class UserServiceMapper
 {
+    public static partial CreateUser.Command MapTo(this CreateRequest request);
+
     public static partial FindUserByUniversityId.Query MapTo(this FindByUniversityIdRequest request);
 
     public static partial FindUserById.Query MapTo(this FindByIdRequest request);
@@ -19,6 +21,8 @@ internal static partial class UserServiceMapper
     public static partial UpdateUserName.Command MapTo(this UpdateNameRequest request);
 
     public static partial QueryUsers.Query MapTo(this QueryRequest request);
+
+    public static partial CreateResponse MapFrom(this CreateUser.Response response);
 
     public static partial FindByUniversityIdResponse MapFrom(this FindUserByUniversityId.Response response);
 

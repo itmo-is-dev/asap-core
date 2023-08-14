@@ -32,7 +32,7 @@ internal class BanSubmissionHandler : IRequestHandler<Command, Response>
     public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         Submission submission = await _context.Submissions
-            .GetSubmissionForCodeOrLatestAsync(request.UserId, request.AssignmentId, request.Code, cancellationToken);
+            .GetSubmissionForCodeOrLatestAsync(request.StudentId, request.AssignmentId, request.Code, cancellationToken);
 
         await _permissionValidator.EnsureSubmissionMentorAsync(
             request.IssuerId,
