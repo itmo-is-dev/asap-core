@@ -17,6 +17,14 @@ public class UserController : UserService.UserServiceBase
         _mediator = mediator;
     }
 
+    public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
+    {
+        CreateUser.Command command = request.MapTo();
+        CreateUser.Response response = await _mediator.Send(command, context.CancellationToken);
+
+        return response.MapFrom();
+    }
+
     public override async Task<FindByUniversityIdResponse> FindByUniversityId(
         FindByUniversityIdRequest request,
         ServerCallContext context)

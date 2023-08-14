@@ -99,4 +99,12 @@ public class SubjectCourseController : SubjectCourseService.SubjectCourseService
 
         return Task.FromResult(new Empty());
     }
+
+    public override async Task<UpdateMentorsResponse> UpdateMentors(UpdateMentorsRequest request, ServerCallContext context)
+    {
+        UpdateMentors.Command command = request.MapTo();
+        await _mediator.Send(command, context.CancellationToken);
+
+        return new UpdateMentorsResponse();
+    }
 }

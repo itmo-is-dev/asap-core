@@ -28,6 +28,8 @@ internal static partial class SubjectCourseServiceMapper
 
     public static partial AddFractionDeadlinePolicy.Command MapTo(this AddDeadlineRequest request);
 
+    public static partial UpdateMentors.Command MapTo(this UpdateMentorsRequest request);
+
     public static partial GetByIdResponse MapFrom(this GetSubjectCourseById.Response response);
 
     public static partial CreateResponse MapFrom(this CreateSubjectCourse.Response response);
