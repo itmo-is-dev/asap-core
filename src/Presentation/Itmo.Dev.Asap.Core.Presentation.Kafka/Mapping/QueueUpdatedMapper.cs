@@ -5,7 +5,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Kafka.Mapping;
 
-[Mapper]
+[Mapper(EnumMappingStrategy = EnumMappingStrategy.ByName)]
 internal static partial class QueueUpdatedMapper
 {
     public static partial QueueUpdatedKey MapToKey(this QueueUpdated.Notification notification);
