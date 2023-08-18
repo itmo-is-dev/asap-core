@@ -27,5 +27,6 @@ internal static partial class SubjectServiceMapper
 
     public static partial UpdateResponse MapFrom(this UpdateSubject.Response response);
 
+    [MapProperty(nameof(GetSubjectCoursesBySubjectId.Response.Courses), nameof(GetCoursesResponse.SubjectCourses))]
     public static partial GetCoursesResponse MapFrom(this GetSubjectCoursesBySubjectId.Response response);
 }
