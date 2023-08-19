@@ -13,9 +13,10 @@
     <PackageVersion Include="Grpc.AspNetCore" Version="2.55.0" />
     <PackageVersion Include="Grpc.AspNetCore.Server.Reflection" Version="2.55.0" />
     <PackageVersion Include="Grpc.Tools" Version="2.56.2" />
-    <PackageVersion Include="Itmo.Dev.Platform.Kafka" Version="1.0.38" />
-    <PackageVersion Include="Itmo.Dev.Platform.Postgres" Version="1.0.38" />
-    <PackageVersion Include="Itmo.Dev.Platform.Testing" Version="1.0.38" />
+    <PackageVersion Include="Itmo.Dev.Platform.Kafka" Version="1.0.39" />
+    <PackageVersion Include="Itmo.Dev.Platform.Logging" Version="1.0.39" />
+    <PackageVersion Include="Itmo.Dev.Platform.Postgres" Version="1.0.39" />
+    <PackageVersion Include="Itmo.Dev.Platform.Testing" Version="1.0.39" />
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
@@ -23,8 +24,6 @@
     <PackageVersion Include="Npgsql" Version="7.0.4" />
     <PackageVersion Include="Respawn" Version="6.0.0" />
     <PackageVersion Include="Riok.Mapperly" Version="3.0.0" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="3.33.0" />
-    <PackageVersion Include="Sentry.Serilog" Version="3.33.0" />
     <PackageVersion Include="SourceKit.Generators.Builder" Version="1.0.4" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="3.1.0" />
   </ItemGroup>

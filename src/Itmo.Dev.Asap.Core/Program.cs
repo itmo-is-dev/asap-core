@@ -4,11 +4,13 @@ using Itmo.Dev.Asap.Core.DataAccess.Extensions;
 using Itmo.Dev.Asap.Core.Presentation.Grpc.Extensions;
 using Itmo.Dev.Asap.Core.Presentation.Kafka.Extensions;
 using Itmo.Dev.Asap.Core.Presentation.SignalR.Extensions;
+using Itmo.Dev.Platform.Logging.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddUserSecrets<Program>();
 
 IConfigurationSection postgresSection = builder.Configuration
     .GetSection("Infrastructure:DataAccess:PostgresConfiguration");
@@ -32,6 +34,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.AddPlatformSentry();
+builder.Host.AddPlatformSerilog(builder.Configuration);
+
 WebApplication app = builder.Build();
 
 await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
@@ -44,6 +49,7 @@ app.UseSwaggerUI();
 
 app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseRouting();
+app.UseSentryTracing();
 
 app.UseRpcPresentation();
 app.UseGrpcPresentation();

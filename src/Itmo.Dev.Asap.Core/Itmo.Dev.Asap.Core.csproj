@@ -2,15 +2,19 @@
     
     <PropertyGroup>
         <NoWarn>$(NoWarn);CA1506;</NoWarn>
+        <UserSecretsId>40b072b4-7392-42ad-8dc2-07ad18092b6d</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Itmo.Dev.Platform.Logging" />
         <PackageReference Include="Itmo.Dev.Platform.Postgres"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design"/>
         <PackageReference Include="Serilog.AspNetCore"/>
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="Serilog.Sinks.File" />
         <PackageReference Include="Swashbuckle.AspNetCore"/>
     </ItemGroup>
 
