@@ -6,11 +6,13 @@ using Itmo.Dev.Asap.Core.Presentation.Kafka.Extensions;
 using Itmo.Dev.Asap.Core.Presentation.SignalR.Extensions;
 using Itmo.Dev.Platform.Logging.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
+using Itmo.Dev.Platform.YandexCloud.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
+await builder.AddYandexCloudConfigurationAsync();
 
 IConfigurationSection postgresSection = builder.Configuration
     .GetSection("Infrastructure:DataAccess:PostgresConfiguration");
