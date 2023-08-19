@@ -51,7 +51,7 @@ app.UseSwaggerUI();
 
 app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseRouting();
-app.UseSentryTracing();
+app.UsePlatformSentryTracing(builder.Configuration);
 
 app.UseRpcPresentation();
 app.UseGrpcPresentation();
