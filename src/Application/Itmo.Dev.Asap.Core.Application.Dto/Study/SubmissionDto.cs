@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Itmo.Dev.Asap.Core.Application.Dto.Study;
 
 public record SubmissionDto(
@@ -12,22 +10,4 @@ public record SubmissionDto(
     double? ExtraPoints,
     double? Points,
     string AssignmentShortName,
-    SubmissionStateDto State)
-{
-    public string ToDisplayString()
-    {
-        var stringBuilder = new StringBuilder();
-
-        stringBuilder
-            .AppendLine($"Submission code: {Code}")
-            .AppendLine($"- Submitted: {SubmissionDate.ToString("dd.MM.yyyy")}");
-
-        if (Points.HasValue)
-            stringBuilder.AppendLine($"- Point: {Points}");
-
-        if (ExtraPoints.HasValue)
-            stringBuilder.AppendLine($"- Extra points: {ExtraPoints}");
-
-        return stringBuilder.ToString();
-    }
-}
+    SubmissionStateDto State);

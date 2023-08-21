@@ -5,6 +5,7 @@
         <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
         <PackageReference Include="MediatR" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+        <PackageReference Include="System.Reactive" />
     </ItemGroup>
 
     <ItemGroup>
@@ -17,6 +18,8 @@
         <ProjectReference Include="..\Itmo.Dev.Asap.Core.Presentation.Grpc.Contracts\Itmo.Dev.Asap.Core.Presentation.Grpc.Contracts.csproj" />
         <ProjectReference Include="..\Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping\Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping.csproj" />
     </ItemGroup>
+
+
 
 
 </Project>

@@ -16,7 +16,7 @@ internal class UpdateQueueCacheNotificationHandler
 
     public Task Handle(QueueUpdated.Notification notification, CancellationToken cancellationToken)
     {
-        string cacheKey = string.Concat(notification.SubjectCourseId, notification.GroupId);
+        string cacheKey = string.Concat(notification.SubjectCourseId, notification.StudentGroupId);
         _cache.Remove(cacheKey);
         _cache.Set(cacheKey, notification.SubmissionsQueue);
 

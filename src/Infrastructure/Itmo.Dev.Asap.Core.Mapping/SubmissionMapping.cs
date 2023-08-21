@@ -1,5 +1,4 @@
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
-using Itmo.Dev.Asap.Core.Application.Dto.Tables;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
 
@@ -20,13 +19,5 @@ public static class SubmissionMapping
             points.AsDto(),
             submission.GroupAssignment.Assignment.ShortName,
             submission.State.Kind.AsDto());
-    }
-
-    public static QueueSubmissionDto ToQueueDto(
-        this RatedSubmission submission)
-    {
-        return new QueueSubmissionDto(
-            submission.Submission.Student.ToDto(),
-            submission.Submission.ToDto(submission.Points));
     }
 }

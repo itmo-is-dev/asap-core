@@ -20,6 +20,7 @@ internal static partial class StudentGroupServiceMapper
 
     public static partial FindGroupsByQuery.Query MapTo(this QueryStudentGroupRequest request);
 
+    [MapProperty(nameof(CreateStudyGroup.Response.Group), nameof(CreateResponse.StudentGroup))]
     public static partial CreateResponse MapFrom(this CreateStudyGroup.Response response);
 
     public static partial FindByIdsResponse MapFrom(this BulkGetStudyGroups.Response response);

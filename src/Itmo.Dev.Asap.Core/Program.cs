@@ -3,7 +3,6 @@ using Itmo.Dev.Asap.Core.Application.Handlers.Extensions;
 using Itmo.Dev.Asap.Core.DataAccess.Extensions;
 using Itmo.Dev.Asap.Core.Presentation.Grpc.Extensions;
 using Itmo.Dev.Asap.Core.Presentation.Kafka.Extensions;
-using Itmo.Dev.Asap.Core.Presentation.SignalR.Extensions;
 using Itmo.Dev.Platform.Logging.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
 using Itmo.Dev.Platform.YandexCloud.Extensions;
@@ -28,7 +27,6 @@ builder.Services
     .AddDataAccess(o => o
         .UseNpgsql(postgresConfiguration.ToConnectionString())
         .UseLoggerFactory(LoggerFactory.Create(x => x.AddSerilog().SetMinimumLevel(LogLevel.Trace))))
-    .AddRpcPresentation()
     .AddGrpcPresentation()
     .AddKafkaPresentation(builder.Configuration);
 
@@ -53,7 +51,6 @@ app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseRouting();
 app.UsePlatformSentryTracing(builder.Configuration);
 
-app.UseRpcPresentation();
 app.UseGrpcPresentation();
 
 await app.RunAsync();

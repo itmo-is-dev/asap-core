@@ -1,6 +1,7 @@
 using Itmo.Dev.Asap.Core.Application.Abstractions.Queue;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
+using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Dto.Tables;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Groups;
@@ -60,10 +61,16 @@ public class QueueService : IQueueService
             .Select(x => x.s.CalculateEffectivePoints(x.a, subjectCourse.DeadlinePolicy))
             .ToArray();
 
-        IReadOnlyList<QueueSubmissionDto> submissionsDto = ratedSubmissions
-            .Select(x => x.ToQueueDto())
+        SubmissionDto[] submissionDto = ratedSubmissions
+            .Select(x => x.Submission.ToDto(x.Points))
             .ToArray();
 
-        return new SubmissionsQueueDto(group.Name, submissionsDto);
+        var students = ratedSubmissions
+            .Select(x => x.Submission.Student)
+            .Distinct()
+            .Select(x => x.ToDto())
+            .ToDictionary(x => x.User.Id);
+
+        return new SubmissionsQueueDto(group.Name, students, submissionDto);
     }
 }

@@ -25,7 +25,6 @@
         <ProjectReference Include="..\Infrastructure\Itmo.Dev.Asap.Core.DataAccess\Itmo.Dev.Asap.Core.DataAccess.csproj"/>
         <ProjectReference Include="..\Presentation\Itmo.Dev.Asap.Core.Presentation.Grpc\Itmo.Dev.Asap.Core.Presentation.Grpc.csproj"/>
         <ProjectReference Include="..\Presentation\Itmo.Dev.Asap.Core.Presentation.Kafka\Itmo.Dev.Asap.Core.Presentation.Kafka.csproj" />
-        <ProjectReference Include="..\Presentation\Itmo.Dev.Asap.Core.Presentation.SignalR\Itmo.Dev.Asap.Core.Presentation.SignalR.csproj" />
     </ItemGroup>
 
     <ItemGroup>

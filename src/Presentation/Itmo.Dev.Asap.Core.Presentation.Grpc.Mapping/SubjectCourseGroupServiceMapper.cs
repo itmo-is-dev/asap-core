@@ -11,5 +11,6 @@ internal static partial class SubjectCourseGroupServiceMapper
 
     public static partial DeleteSubjectCourseGroup.Command MapTo(this DeleteRequest request);
 
+    [MapProperty(nameof(BulkCreateSubjectCourseGroups.Response.Groups), nameof(CreateResponse.SubjectCourseGroups))]
     public static partial CreateResponse MapFrom(this BulkCreateSubjectCourseGroups.Response response);
 }

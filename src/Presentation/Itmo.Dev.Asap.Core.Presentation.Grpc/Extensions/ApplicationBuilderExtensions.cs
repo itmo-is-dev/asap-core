@@ -17,6 +17,7 @@ public static class ApplicationBuilderExtensions
             x.MapGrpcService<SubjectCourseGroupController>();
             x.MapGrpcService<UserController>();
             x.MapGrpcService<PermissionsController>();
+            x.MapGrpcService<QueueController>();
 
             x.MapGrpcReflectionService();
         });
