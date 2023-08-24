@@ -5,5 +5,5 @@ namespace Itmo.Dev.Asap.Core.Application.Dto.Tables;
 
 public record struct SubmissionsQueueDto(
     string GroupName,
-    IReadOnlyDictionary<Guid, StudentDto> Students,
+    IReadOnlyCollection<StudentDto> Students,
     IReadOnlyList<SubmissionDto> Submissions);

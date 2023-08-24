@@ -12,6 +12,6 @@ public static class GroupAssignmentMapping
             groupAssignment.Group.Name,
             groupAssignment.Id.AssignmentId,
             groupAssignment.Assignment.Title,
-            groupAssignment.Deadline.AsDateTime().AsDateOnly());
+            groupAssignment.Deadline);
     }
 }

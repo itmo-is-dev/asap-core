@@ -28,7 +28,7 @@ public class QueueController : QueueService.QueueServiceBase
 
         await foreach (QueueUpdated.Notification notification in enumerable)
         {
-            IEnumerable<Student> students = notification.SubmissionsQueue.Students.Values
+            IEnumerable<Student> students = notification.SubmissionsQueue.Students
                 .Select(x => x.MapToProtoStudent());
 
             IEnumerable<QueueUpdatedResponse.Types.Submission> submissions = notification.SubmissionsQueue.Submissions

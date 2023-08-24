@@ -30,6 +30,8 @@ builder.Services
     .AddGrpcPresentation()
     .AddKafkaPresentation(builder.Configuration);
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -11,7 +11,7 @@ public static class SubmissionMapping
         return new SubmissionDto(
             submission.Id,
             submission.Code,
-            submission.SubmissionDate.AsDateTime(),
+            submission.SubmissionDate.AsUtcDateTime(),
             submission.Student.UserId,
             submission.GroupAssignment.Id.AssignmentId,
             submission.Payload,

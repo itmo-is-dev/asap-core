@@ -9,7 +9,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 
-[Mapper]
+[Mapper(EnumMappingStrategy = EnumMappingStrategy.ByName)]
 internal static partial class SubjectCourseServiceMapper
 {
     public static partial GetSubjectCourseById.Query MapTo(this GetByIdRequest request);
@@ -42,8 +42,12 @@ internal static partial class SubjectCourseServiceMapper
 
     public static partial GetGroupsResponse MapFrom(this GetSubjectCourseGroupsBySubjectCourseId.Response response);
 
+    [MapProperty(nameof(GetSubmissionsQueue.Response.SubmissionsQueue), nameof(GetStudentGroupQueueResponse.Queue))]
     public static partial GetStudentGroupQueueResponse MapFrom(this GetSubmissionsQueue.Response response);
 
     private static TimeSpan MapToTimeSpan(Duration duration)
         => duration.ToTimeSpan();
+
+    private static Timestamp MapToTimestamp(DateTime dateTime)
+        => Timestamp.FromDateTime(dateTime);
 }

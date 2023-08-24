@@ -15,7 +15,10 @@ internal static partial class AssignmentsServiceMapper
         => DateOnly.FromDateTime(timestamp.ToDateTime());
 
     public static Timestamp MapToTimestamp(this DateOnly dateOnly)
-        => Timestamp.FromDateTime(dateOnly.ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.Zero)));
+    {
+        var dateTime = dateOnly.ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.Zero));
+        return Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
+    }
 
     public static partial CreateAssignment.Command MapTo(this CreateRequest request);
 

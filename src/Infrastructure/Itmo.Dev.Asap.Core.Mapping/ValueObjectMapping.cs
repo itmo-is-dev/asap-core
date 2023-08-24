@@ -7,19 +7,9 @@ namespace Itmo.Dev.Asap.Core.Mapping;
 
 public static class ValueObjectMapping
 {
-    public static DateTime AsDateTime(this DateOnly date)
+    public static DateTime AsUtcDateTime(this SpbDateTime date)
     {
-        return date.ToDateTime(new TimeOnly(0));
-    }
-
-    public static DateTime AsDateTime(this SpbDateTime date)
-    {
-        return date.Value;
-    }
-
-    public static DateOnly AsDateOnly(this DateTime date)
-    {
-        return DateOnly.FromDateTime(date);
+        return Calendar.ToUtc(date);
     }
 
     public static SubmissionStateWorkflowTypeDto AsDto(this SubmissionStateWorkflowType type)
