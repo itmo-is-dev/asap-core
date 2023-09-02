@@ -22,7 +22,7 @@ internal class AssignmentCreatedNotificationHandler : INotificationHandler<Assig
     {
         var message = new ProducerKafkaMessage<AssignmentCreatedKey, AssignmentCreatedValue>(
             notification.MapToKey(),
-            notification.MapToValue());
+            notification.Assignment.MapToValue());
 
         await _producer.ProduceAsync(message, cancellationToken);
     }

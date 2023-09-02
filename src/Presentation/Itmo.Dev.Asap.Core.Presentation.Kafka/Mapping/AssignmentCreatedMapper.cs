@@ -1,4 +1,5 @@
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Assignments.Notifications;
+using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Kafka;
 using Riok.Mapperly.Abstractions;
 
@@ -9,5 +10,5 @@ internal static partial class AssignmentCreatedMapper
 {
     public static partial AssignmentCreatedKey MapToKey(this AssignmentCreated.Notification notification);
 
-    public static partial AssignmentCreatedValue MapToValue(this AssignmentCreated.Notification notification);
+    public static partial AssignmentCreatedValue MapToValue(this AssignmentDto assignment);
 }
