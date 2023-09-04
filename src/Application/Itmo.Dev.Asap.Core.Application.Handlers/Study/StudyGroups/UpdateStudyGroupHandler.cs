@@ -1,11 +1,11 @@
-using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudyGroups.Notifications;
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudentGroups.Notifications;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Groups;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
-using static Itmo.Dev.Asap.Core.Application.Contracts.Study.StudyGroups.Commands.UpdateStudyGroup;
+using static Itmo.Dev.Asap.Core.Application.Contracts.Study.StudentGroups.Commands.UpdateStudentGroup;
 
 namespace Itmo.Dev.Asap.Core.Application.Handlers.Study.StudyGroups;
 
@@ -28,9 +28,9 @@ internal class UpdateStudyGroupHandler : IRequestHandler<Command, Response>
         _context.StudentGroups.Update(studentGroup);
         await _context.SaveChangesAsync(cancellationToken);
 
-        StudyGroupDto dto = studentGroup.ToDto();
+        StudentGroupDto dto = studentGroup.ToDto();
 
-        var notification = new StudyGroupUpdated.Notification(dto);
+        var notification = new StudentGroupUpdated.Notification(dto);
         await _publisher.PublishAsync(notification, cancellationToken);
 
         return new Response(dto);

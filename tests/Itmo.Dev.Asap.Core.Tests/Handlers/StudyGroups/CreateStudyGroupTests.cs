@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudyGroups.Commands;
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudentGroups.Commands;
 using Itmo.Dev.Asap.Core.Application.Handlers.Study.StudyGroups;
 using Itmo.Dev.Asap.Core.Tests.Fixtures;
 using MediatR;
@@ -21,11 +21,11 @@ public class CreateStudyGroupTests : CoreDatabaseTestBase
 
         var publisher = new Mock<IPublisher>();
 
-        var command = new CreateStudyGroup.Command(name);
+        var command = new CreateStudentGroup.Command(name);
         var handler = new CreateStudyGroupHandler(PersistenceContext, publisher.Object);
 
         // Act
-        CreateStudyGroup.Response response = await handler.Handle(command, default);
+        CreateStudentGroup.Response response = await handler.Handle(command, default);
 
         // Assert
         response.Group.Name.Should().Be(name);

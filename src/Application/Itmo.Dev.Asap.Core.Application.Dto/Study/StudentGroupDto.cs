@@ -1,8 +1,8 @@
 namespace Itmo.Dev.Asap.Core.Application.Dto.Study;
 
-public class StudyGroupDto
+public class StudentGroupDto
 {
-    public StudyGroupDto(Guid id, string name)
+    public StudentGroupDto(Guid id, string name)
     {
         Id = id;
         Name = name;

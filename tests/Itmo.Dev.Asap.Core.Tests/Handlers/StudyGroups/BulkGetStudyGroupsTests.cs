@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudyGroups.Queries;
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudentGroups.Queries;
 using Itmo.Dev.Asap.Core.Application.Handlers.Study.StudyGroups;
 using Itmo.Dev.Asap.Core.Tests.Fixtures;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +22,11 @@ public class BulkGetStudyGroupsTests : CoreDatabaseTestBase
             .Select(x => x.Id)
             .ToListAsync();
 
-        var query = new BulkGetStudyGroups.Query(ids);
+        var query = new BulkGetStudentGroups.Query(ids);
         var handler = new BulkGetStudentGroupsHandler(PersistenceContext);
 
         // Act
-        BulkGetStudyGroups.Response response = await handler.Handle(query, default);
+        BulkGetStudentGroups.Response response = await handler.Handle(query, default);
 
         // Assert
         response.Groups.Count.Should().Be(ids.Count);

@@ -51,6 +51,7 @@ message QueryStudentGroupRequest {
   int32 page_size = 2;
   
   repeated string name_patterns = 3;
+  repeated string excluded_subject_course_ids = 4;
 }
 
 message QueryStudentGroupResponse {

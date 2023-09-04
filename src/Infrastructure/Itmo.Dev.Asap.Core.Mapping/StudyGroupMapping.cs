@@ -5,8 +5,8 @@ namespace Itmo.Dev.Asap.Core.Mapping;
 
 public static class StudyGroupMapping
 {
-    public static StudyGroupDto ToDto(this StudentGroup group)
+    public static StudentGroupDto ToDto(this StudentGroup group)
     {
-        return new StudyGroupDto(group.Id, group.Name);
+        return new StudentGroupDto(group.Id, group.Name);
     }
 }

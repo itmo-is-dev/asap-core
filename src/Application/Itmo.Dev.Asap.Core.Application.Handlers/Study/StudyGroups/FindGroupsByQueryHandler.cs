@@ -3,7 +3,7 @@ using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
-using static Itmo.Dev.Asap.Core.Application.Contracts.Study.StudyGroups.Queries.FindGroupsByQuery;
+using static Itmo.Dev.Asap.Core.Application.Contracts.Study.StudentGroups.Queries.FindStudentGroupsByQuery;
 
 namespace Itmo.Dev.Asap.Core.Application.Handlers.Study.StudyGroups;
 
@@ -20,10 +20,11 @@ internal class FindGroupsByQueryHandler : IRequestHandler<Query, Response>
     {
         var query = StudentGroupQuery.Build(x => x
             .WithNamePatterns(request.NamePatterns)
+            .WithExcludedSubjectCourseIds(request.ExcludedSubjectCourseIds)
             .WithCursor(request.PageToken?.Id)
             .WithLimit(request.PageSize));
 
-        StudyGroupDto[] dto = await _context.StudentGroups
+        StudentGroupDto[] dto = await _context.StudentGroups
             .QueryAsync(query, cancellationToken)
             .Select(x => x.ToDto())
             .ToArrayAsync(cancellationToken);

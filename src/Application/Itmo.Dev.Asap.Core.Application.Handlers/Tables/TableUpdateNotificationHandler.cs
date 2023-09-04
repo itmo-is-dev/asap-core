@@ -3,7 +3,7 @@ using Itmo.Dev.Asap.Core.Application.Abstractions.SubjectCourses;
 using Itmo.Dev.Asap.Core.Application.Contracts.Students.Notifications;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Assignments.Notifications;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.GroupAssignments.Notifications;
-using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudyGroups.Notifications;
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.StudentGroups.Notifications;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Notifications;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Notifications;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Notifications;
@@ -20,7 +20,7 @@ internal class TableUpdateNotificationHandler :
     INotificationHandler<AssignmentCreated.Notification>,
     INotificationHandler<AssignmentPointsUpdated.Notification>,
     INotificationHandler<GroupAssignmentDeadlineUpdated.Notification>,
-    INotificationHandler<StudyGroupUpdated.Notification>,
+    INotificationHandler<StudentGroupUpdated.Notification>,
     INotificationHandler<SubjectCourseGroupCreated.Notification>,
     INotificationHandler<SubjectCourseGroupDeleted.Notification>,
     INotificationHandler<DeadlinePolicyAdded.Notification>,
@@ -67,7 +67,7 @@ internal class TableUpdateNotificationHandler :
         _queueUpdateService.Update(subjectCourse.Id, notification.GroupAssignment.GroupId);
     }
 
-    public async Task Handle(StudyGroupUpdated.Notification notification, CancellationToken cancellationToken)
+    public async Task Handle(StudentGroupUpdated.Notification notification, CancellationToken cancellationToken)
     {
         var query = SubjectCourseQuery.Build(x => x.WithStudentGroupId(notification.Group.Id));
 
