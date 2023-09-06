@@ -13,6 +13,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
 await builder.AddYandexCloudConfigurationAsync();
 
+builder.Services.Configure<HostOptions>(x => x.ShutdownTimeout = TimeSpan.FromSeconds(2));
+
 IConfigurationSection postgresSection = builder.Configuration
     .GetSection("Infrastructure:DataAccess:PostgresConfiguration");
 
