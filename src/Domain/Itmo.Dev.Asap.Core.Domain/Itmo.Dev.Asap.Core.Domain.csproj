@@ -9,4 +9,5 @@
         <ProjectReference Include="..\Itmo.Dev.Asap.Core.Common\Itmo.Dev.Asap.Core.Common.csproj" />
     </ItemGroup>
 
+
 </Project>

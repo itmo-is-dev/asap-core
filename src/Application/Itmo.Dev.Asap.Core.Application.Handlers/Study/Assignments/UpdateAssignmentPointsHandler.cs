@@ -3,7 +3,7 @@ using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
-using Itmo.Dev.Asap.Core.Domain.Study.SubjectCourses;
+using Itmo.Dev.Asap.Core.Domain.Study.Assignments.Results;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
@@ -26,11 +26,12 @@ internal class UpdateAssignmentPointsHandler : IRequestHandler<Command, Response
     {
         Assignment assignment = await _context.Assignments.GetByIdAsync(request.AssignmentId, cancellationToken);
 
-        SubjectCourse subjectCourse = await _context.SubjectCourses
-            .GetByAssignmentId(request.AssignmentId, cancellationToken);
+        UpdatePointsResult result = assignment.UpdatePoints(
+            request.MinPoints is null ? assignment.MinPoints : new Points(request.MinPoints.Value),
+            request.MaxPoints is null ? assignment.MaxPoints : new Points(request.MaxPoints.Value));
 
-        assignment.UpdateMinPoints(new Points(request.MinPoints));
-        assignment.UpdateMaxPoints(new Points(request.MaxPoints));
+        if (result is UpdatePointsResult.MaxPointsLessThanMinPoints)
+            return new Response.MaxPointsLessThanMinPoints();
 
         _context.Assignments.Update(assignment);
         await _context.SaveChangesAsync(cancellationToken);
@@ -40,6 +41,6 @@ internal class UpdateAssignmentPointsHandler : IRequestHandler<Command, Response
         var notification = new AssignmentPointsUpdated.Notification(dto);
         await _publisher.PublishAsync(notification, cancellationToken);
 
-        return new Response(dto);
+        return new Response.Success(dto);
     }
 }

@@ -14,12 +14,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Application\Itmo.Dev.Asap.Core.Application.Abstractions\Itmo.Dev.Asap.Core.Application.Abstractions.csproj" />
-        <ProjectReference Include="..\..\Infrastructure\Itmo.Dev.Asap.Core.Mapping\Itmo.Dev.Asap.Core.Mapping.csproj" />
         <ProjectReference Include="..\Itmo.Dev.Asap.Core.Presentation.Grpc.Contracts\Itmo.Dev.Asap.Core.Presentation.Grpc.Contracts.csproj" />
         <ProjectReference Include="..\Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping\Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping.csproj" />
     </ItemGroup>
-
-
-
 
 </Project>

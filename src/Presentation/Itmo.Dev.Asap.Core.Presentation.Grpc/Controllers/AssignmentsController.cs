@@ -41,7 +41,17 @@ public class AssignmentsController : AssignmentsService.AssignmentsServiceBase
         UpdateAssignmentPoints.Command command = request.MapTo();
         UpdateAssignmentPoints.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+        return response switch
+        {
+            UpdateAssignmentPoints.Response.Success s => s.MapFrom(),
+
+            UpdateAssignmentPoints.Response.MaxPointsLessThanMinPoints
+                => throw new RpcException(new Status(
+                    StatusCode.InvalidArgument,
+                    "Max points cannot be less than min points")),
+
+            _ => throw new RpcException(new Status(StatusCode.Unknown, "Operation yielded unknown result")),
+        };
     }
 
     public override async Task<GetGroupAssignmentsResponse> GetGroupAssignments(

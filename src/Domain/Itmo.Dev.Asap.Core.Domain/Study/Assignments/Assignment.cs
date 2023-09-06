@@ -1,4 +1,4 @@
-using Itmo.Dev.Asap.Core.Common.Exceptions;
+using Itmo.Dev.Asap.Core.Domain.Study.Assignments.Results;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
 using RichEntity.Annotations;
 
@@ -41,26 +41,15 @@ public partial class Assignment : IEntity<Guid>
 
     public AssignmentInfo Info => new AssignmentInfo(Id, Title, ShortName);
 
-    public void UpdateMinPoints(Points value)
+    public UpdatePointsResult UpdatePoints(Points minPoints, Points maxPoints)
     {
-        if (value > MaxPoints)
-        {
-            string message = $"New minimal points ({value}) are greater than maximal points ({MaxPoints})";
-            throw new DomainInvalidOperationException(message);
-        }
+        if (minPoints > maxPoints)
+            return new UpdatePointsResult.MaxPointsLessThanMinPoints();
 
-        MinPoints = value;
-    }
+        MinPoints = minPoints;
+        MaxPoints = maxPoints;
 
-    public void UpdateMaxPoints(Points value)
-    {
-        if (value < MinPoints)
-        {
-            string message = $"New maximal points ({value}) are less than minimal points ({MinPoints})";
-            throw new DomainInvalidOperationException(message);
-        }
-
-        MaxPoints = value;
+        return new UpdatePointsResult.Success();
     }
 
     public Points RatedWith(Fraction? value)

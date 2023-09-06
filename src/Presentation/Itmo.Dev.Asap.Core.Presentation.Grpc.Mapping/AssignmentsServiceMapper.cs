@@ -35,7 +35,7 @@ internal static partial class AssignmentsServiceMapper
 
     public static partial GetByIdResponse MapFrom(this GetAssignmentById.Response response);
 
-    public static partial UpdatePointsResponse MapFrom(this UpdateAssignmentPoints.Response response);
+    public static partial UpdatePointsResponse MapFrom(this UpdateAssignmentPoints.Response.Success response);
 
     public static partial GetGroupAssignmentsResponse MapFrom(this GetGroupAssignments.Response response);
 
