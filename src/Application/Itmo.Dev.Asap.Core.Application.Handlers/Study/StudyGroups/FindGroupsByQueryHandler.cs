@@ -19,6 +19,7 @@ internal class FindGroupsByQueryHandler : IRequestHandler<Query, Response>
     public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var query = StudentGroupQuery.Build(x => x
+            .WithExcludedIds(request.ExcludedIds)
             .WithNamePatterns(request.NamePatterns)
             .WithExcludedSubjectCourseIds(request.ExcludedSubjectCourseIds)
             .WithCursor(request.PageToken?.Id)

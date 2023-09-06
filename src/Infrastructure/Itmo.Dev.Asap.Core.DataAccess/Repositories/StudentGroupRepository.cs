@@ -27,6 +27,11 @@ public class StudentGroupRepository : IStudentGroupRepository
             queryable = queryable.Where(x => query.Ids.Contains(x.Id));
         }
 
+        if (query.ExcludedIds is not [])
+        {
+            queryable = queryable.Where(x => !query.ExcludedIds.Contains(x.Id));
+        }
+
         if (query.StudentIds is not [])
         {
             queryable = queryable.Where(g => g.Students
