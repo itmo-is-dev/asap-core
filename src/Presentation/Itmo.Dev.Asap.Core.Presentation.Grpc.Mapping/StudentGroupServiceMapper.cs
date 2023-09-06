@@ -29,6 +29,7 @@ internal static partial class StudentGroupServiceMapper
 
     public static partial GetStudentsResponse MapFrom(this GetStudentsByGroupId.Response response);
 
+    [MapProperty(nameof(FindStudentGroupsByQuery.Response.Groups), nameof(QueryStudentGroupResponse.StudentGroups))]
     public static partial QueryStudentGroupResponse MapFrom(this FindStudentGroupsByQuery.Response response);
 
     private static FindStudentGroupsByQuery.PageToken MapToPageToken(string value)

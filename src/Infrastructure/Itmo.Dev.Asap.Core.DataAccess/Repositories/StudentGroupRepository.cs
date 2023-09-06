@@ -36,8 +36,10 @@ public class StudentGroupRepository : IStudentGroupRepository
 
         if (query.NamePatterns is not [])
         {
-            queryable = queryable.Where(x => query.NamePatterns.Any(pattern =>
-                EF.Functions.ILike('%' + x.Name + '%', pattern)));
+            string[] namePatterns = query.NamePatterns.Select(pattern => '%' + pattern + '%').ToArray();
+
+            queryable = queryable.Where(x => namePatterns.Any(p =>
+                EF.Functions.ILike(x.Name, p)));
         }
 
         if (query.ExcludedSubjectCourseIds is not [])

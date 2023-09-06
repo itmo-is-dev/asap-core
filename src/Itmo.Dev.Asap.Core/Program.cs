@@ -26,7 +26,8 @@ builder.Services
     .AddHandlers()
     .AddDataAccess(o => o
         .UseNpgsql(postgresConfiguration.ToConnectionString())
-        .UseLoggerFactory(LoggerFactory.Create(x => x.AddSerilog().SetMinimumLevel(LogLevel.Trace))))
+        .UseLoggerFactory(LoggerFactory.Create(x => x.AddSerilog().SetMinimumLevel(LogLevel.Trace)))
+        .EnableSensitiveDataLogging())
     .AddGrpcPresentation()
     .AddKafkaPresentation(builder.Configuration);
 
