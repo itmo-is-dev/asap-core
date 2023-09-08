@@ -20,6 +20,8 @@ internal static partial class StudentServiceMapper
 
     public static partial CreateStudentResponse MapFrom(this CreateStudent.Response response);
 
+    public static partial DismissFromGroupResponse MapFrom(this DismissStudentFromGroup.Response response);
+
     public static partial TransferStudentResponse MapFrom(this TransferStudent.Response response);
 
     public static partial QueryStudentResponse MapFrom(this FindStudentsByQuery.Response response);

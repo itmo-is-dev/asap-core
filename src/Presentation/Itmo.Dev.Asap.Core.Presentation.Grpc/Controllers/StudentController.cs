@@ -1,4 +1,3 @@
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Contracts.Students.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Students.Queries;
@@ -26,12 +25,12 @@ public class StudentController : StudentService.StudentServiceBase
         return response.MapFrom();
     }
 
-    public override async Task<Empty> DismissFromGroup(DismissFromGroupRequest request, ServerCallContext context)
+    public override async Task<DismissFromGroupResponse> DismissFromGroup(DismissFromGroupRequest request, ServerCallContext context)
     {
         DismissStudentFromGroup.Command command = request.MapTo();
-        await _mediator.Send(command);
+        DismissStudentFromGroup.Response response = await _mediator.Send(command);
 
-        return new Empty();
+        return response.MapFrom();
     }
 
     public override async Task<TransferStudentResponse> Transfer(
