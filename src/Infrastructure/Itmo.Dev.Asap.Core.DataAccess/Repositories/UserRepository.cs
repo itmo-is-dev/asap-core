@@ -63,7 +63,9 @@ public class UserRepository : RepositoryBase<User, UserModel>, IUserRepository
 
         if (query.FullNamePatterns is not [])
         {
-            queryable = queryable.Where(user => query.FullNamePatterns.Any(pattern =>
+            string[] patterns = query.FullNamePatterns.Select(pattern => $"%{pattern}%").ToArray();
+
+            queryable = queryable.Where(user => patterns.Any(pattern =>
                 EF.Functions.ILike(user.FirstName, pattern)
                 || EF.Functions.ILike(user.MiddleName, pattern)
                 || EF.Functions.ILike(user.LastName, pattern)));

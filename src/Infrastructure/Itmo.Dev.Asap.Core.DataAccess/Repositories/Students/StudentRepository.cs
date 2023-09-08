@@ -73,7 +73,9 @@ public class StudentRepository : RepositoryBase<Student, StudentModel>, IStudent
 
         if (query.FullNamePatterns is not [])
         {
-            queryable = queryable.Where(student => query.FullNamePatterns.Any(pattern =>
+            string[] patterns = query.FullNamePatterns.Select(pattern => $"%{pattern}%").ToArray();
+
+            queryable = queryable.Where(student => patterns.Any(pattern =>
                 EF.Functions.ILike(student.User.FirstName, pattern)
                 || EF.Functions.ILike(student.User.MiddleName, pattern)
                 || EF.Functions.ILike(student.User.LastName, pattern)));
