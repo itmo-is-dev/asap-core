@@ -75,10 +75,10 @@ public class StudentRepository : RepositoryBase<Student, StudentModel>, IStudent
         {
             string[] patterns = query.FullNamePatterns.Select(pattern => $"%{pattern}%").ToArray();
 
-            queryable = queryable.Where(student => patterns.Any(pattern =>
-                EF.Functions.ILike(student.User.FirstName, pattern)
-                || EF.Functions.ILike(student.User.MiddleName, pattern)
-                || EF.Functions.ILike(student.User.LastName, pattern)));
+            queryable = queryable.Where(student =>
+                patterns.Any(pattern => EF.Functions.ILike(student.User.FirstName, pattern))
+                || patterns.Any(pattern => EF.Functions.ILike(student.User.MiddleName, pattern))
+                || patterns.Any(pattern => EF.Functions.ILike(student.User.LastName, pattern)));
         }
 
         if (query.Cursor is not null)
