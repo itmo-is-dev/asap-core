@@ -17,8 +17,8 @@ message QueueUpdatedValue {
   SubmissionQueue submissions_queue = 4;
 
   message SubmissionQueue {
-    map<string, Student> students = 2;
-    repeated Submission submissions = 3;
+    map<string, Student> students = 1;
+    repeated Submission submissions = 2;
   }
 
   message Student {
