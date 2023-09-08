@@ -18,10 +18,8 @@ builder.Services.Configure<HostOptions>(x => x.ShutdownTimeout = TimeSpan.FromSe
 IConfigurationSection postgresSection = builder.Configuration
     .GetSection("Infrastructure:DataAccess:PostgresConfiguration");
 
-PostgresConnectionConfiguration? postgresConfiguration = postgresSection.Get<PostgresConnectionConfiguration>();
-
-if (postgresConfiguration is null)
-    throw new InvalidOperationException("Postgres is not configured");
+PostgresConnectionConfiguration postgresConfiguration = postgresSection.Get<PostgresConnectionConfiguration>()
+    ?? throw new InvalidOperationException("Postgres is not configured");
 
 builder.Services
     .AddApplicationConfiguration()
