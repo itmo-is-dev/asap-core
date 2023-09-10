@@ -18,7 +18,7 @@ internal static partial class StudentServiceMapper
 
     public static partial FindStudentsByQuery.Query MapTo(this QueryStudentRequest request);
 
-    public static partial CreateStudentsResponse MapFrom(this CreateStudents.Response response);
+    public static partial CreateStudentsResponse MapFrom(this CreateStudents.Response.Success response);
 
     public static partial DismissFromGroupResponse MapFrom(this DismissStudentFromGroup.Response response);
 

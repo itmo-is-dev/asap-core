@@ -22,10 +22,20 @@ public class StudentController : StudentService.StudentServiceBase
         CreateStudents.Command command = request.MapTo();
         CreateStudents.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+        return response switch
+        {
+            CreateStudents.Response.Success s => s.MapFrom(),
+
+            CreateStudents.Response.GroupsNotFound e => throw new RpcException(
+                new Status(StatusCode.NotFound, $"Not found groups: {string.Join(", ", e.GroupIds)}")),
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation produced unexpected result")),
+        };
     }
 
-    public override async Task<DismissFromGroupResponse> DismissFromGroup(DismissFromGroupRequest request, ServerCallContext context)
+    public override async Task<DismissFromGroupResponse> DismissFromGroup(
+        DismissFromGroupRequest request,
+        ServerCallContext context)
     {
         DismissStudentFromGroup.Command command = request.MapTo();
         DismissStudentFromGroup.Response response = await _mediator.Send(command);

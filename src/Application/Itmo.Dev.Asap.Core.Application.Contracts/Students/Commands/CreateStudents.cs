@@ -21,6 +21,6 @@ internal static class CreateStudents
 
         public sealed record Success(IEnumerable<StudentDto> Students) : Response;
 
-        public sealed record GroupNotFound(Guid GroupId) : Response;
+        public sealed record GroupsNotFound(IEnumerable<Guid> GroupIds) : Response;
     }
 }

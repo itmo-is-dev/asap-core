@@ -29,23 +29,28 @@ internal class CreateStudentHandler : IRequestHandler<Command, Response>
             .QueryAsync(groupsQuery, cancellationToken)
             .ToDictionaryAsync(x => x.Id, cancellationToken);
 
-        var students = new List<Student>(request.Students.Count);
-
-        foreach (Command.Model model in request.Students)
+        if (groupsQuery.Ids.Length != groups.Count)
         {
-            if (groups.TryGetValue(model.GroupId, out StudentGroup? group) is false)
-                return new Response.GroupNotFound(model.GroupId);
-
-            var user = new User(Guid.NewGuid(), model.FirstName, model.MiddleName, model.LastName);
-            IsuUserAssociation.CreateAndAttach(Guid.NewGuid(), user, model.UniversityId);
-
-            var student = new Student(user, group.Info);
-
-            _context.Users.Add(user);
-            _context.Students.Add(student);
-
-            students.Add(student);
+            IEnumerable<Guid> notFoundGroupIds = groupsQuery.Ids.Except(groups.Keys);
+            return new Response.GroupsNotFound(notFoundGroupIds);
         }
+
+        Student[] students = request.Students
+            .Select(model =>
+            {
+                StudentGroup group = groups[model.GroupId];
+
+                var user = new User(Guid.NewGuid(), model.FirstName, model.MiddleName, model.LastName);
+                IsuUserAssociation.CreateAndAttach(Guid.NewGuid(), user, model.UniversityId);
+
+                var student = new Student(user, group.Info);
+
+                _context.Users.Add(user);
+                _context.Students.Add(student);
+
+                return student;
+            })
+            .ToArray();
 
         await _context.SaveChangesAsync(cancellationToken);
 
