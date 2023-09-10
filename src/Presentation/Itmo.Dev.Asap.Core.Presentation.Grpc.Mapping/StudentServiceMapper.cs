@@ -10,7 +10,7 @@ namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 [Mapper]
 internal static partial class StudentServiceMapper
 {
-    public static partial CreateStudent.Command MapTo(this CreateStudentRequest request);
+    public static partial CreateStudents.Command MapTo(this CreateStudentsRequest request);
 
     public static partial DismissStudentFromGroup.Command MapTo(this DismissFromGroupRequest request);
 
@@ -18,7 +18,7 @@ internal static partial class StudentServiceMapper
 
     public static partial FindStudentsByQuery.Query MapTo(this QueryStudentRequest request);
 
-    public static partial CreateStudentResponse MapFrom(this CreateStudent.Response response);
+    public static partial CreateStudentsResponse MapFrom(this CreateStudents.Response response);
 
     public static partial DismissFromGroupResponse MapFrom(this DismissStudentFromGroup.Response response);
 

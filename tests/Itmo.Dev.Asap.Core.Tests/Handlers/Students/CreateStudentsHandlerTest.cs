@@ -9,9 +9,9 @@ using Xunit;
 namespace Itmo.Dev.Asap.Core.Tests.Handlers.Students;
 
 [Collection(nameof(CoreDatabaseCollectionFixture))]
-public class CreateStudentTest : CoreDatabaseTestBase, IAsyncDisposeLifetime
+public class CreateStudentsHandlerTest : CoreDatabaseTestBase, IAsyncDisposeLifetime
 {
-    public CreateStudentTest(CoreDatabaseFixture database) : base(database) { }
+    public CreateStudentsHandlerTest(CoreDatabaseFixture database) : base(database) { }
 
     [Fact]
     public async Task Handle_Should_NotThrow()
@@ -20,11 +20,12 @@ public class CreateStudentTest : CoreDatabaseTestBase, IAsyncDisposeLifetime
             .Select(x => x.Id)
             .FirstAsync();
 
-        var command = new CreateStudent.Command("A", "B", "C", groupId, 0);
+        var model = new CreateStudents.Command.Model("A", "B", "C", groupId, 0);
+        var command = new CreateStudents.Command(new[] { model });
         var handler = new CreateStudentHandler(PersistenceContext);
 
-        CreateStudent.Response response = await handler.Handle(command, default);
+        CreateStudents.Response response = await handler.Handle(command, default);
 
-        response.Student.Should().NotBeNull();
+        response.Should().BeOfType<CreateStudents.Response.Success>().Which.Students.Should().NotBeEmpty();
     }
 }

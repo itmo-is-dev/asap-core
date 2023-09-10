@@ -17,10 +17,10 @@ public class StudentController : StudentService.StudentServiceBase
         _mediator = mediator;
     }
 
-    public override async Task<CreateStudentResponse> Create(CreateStudentRequest request, ServerCallContext context)
+    public override async Task<CreateStudentsResponse> Create(CreateStudentsRequest request, ServerCallContext context)
     {
-        CreateStudent.Command command = request.MapTo();
-        CreateStudent.Response response = await _mediator.Send(command, context.CancellationToken);
+        CreateStudents.Command command = request.MapTo();
+        CreateStudents.Response response = await _mediator.Send(command, context.CancellationToken);
 
         return response.MapFrom();
     }
