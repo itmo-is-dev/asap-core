@@ -3,6 +3,7 @@ using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Groups;
 using Itmo.Dev.Asap.Core.Domain.Students;
+using Itmo.Dev.Asap.Core.Domain.UserAssociations;
 using Itmo.Dev.Asap.Core.Domain.Users;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
@@ -25,6 +26,8 @@ internal class CreateStudentHandler : IRequestHandler<Command, Response>
             .GetByIdAsync(request.GroupId, cancellationToken);
 
         var user = new User(Guid.NewGuid(), request.FirstName, request.MiddleName, request.LastName);
+        IsuUserAssociation.CreateAndAttach(Guid.NewGuid(), user, request.UniversityId);
+
         var student = new Student(user, group.Info);
 
         _context.Users.Add(user);

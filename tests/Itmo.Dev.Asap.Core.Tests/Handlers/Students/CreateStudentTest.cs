@@ -20,7 +20,7 @@ public class CreateStudentTest : CoreDatabaseTestBase, IAsyncDisposeLifetime
             .Select(x => x.Id)
             .FirstAsync();
 
-        var command = new CreateStudent.Command("A", "B", "C", groupId);
+        var command = new CreateStudent.Command("A", "B", "C", groupId, 0);
         var handler = new CreateStudentHandler(PersistenceContext);
 
         CreateStudent.Response response = await handler.Handle(command, default);
