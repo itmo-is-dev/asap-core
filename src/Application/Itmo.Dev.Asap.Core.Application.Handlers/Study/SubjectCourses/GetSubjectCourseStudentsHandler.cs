@@ -1,6 +1,7 @@
 using Itmo.Dev.Asap.Core.Application.DataAccess;
+using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Application.Specifications;
-using Itmo.Dev.Asap.Core.Domain.Students;
+using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
 using static Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Queries.GetSubjectCourseStudents;
 
@@ -17,11 +18,11 @@ internal class GetSubjectCourseStudentsHandler : IRequestHandler<Query, Response
 
     public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
-        IAsyncEnumerable<Student> students = _context.Students
-            .GetStudentsBySubjectCourseIdAsync(request.SubjectCourseId, cancellationToken);
+        StudentDto[] dto = await _context.Students
+            .GetStudentsBySubjectCourseIdAsync(request.SubjectCourseId, cancellationToken)
+            .Select(x => x.ToDto())
+            .ToArrayAsync(cancellationToken);
 
-        Guid[] ids = await students.Select(x => x.UserId).ToArrayAsync(cancellationToken);
-
-        return new Response(ids);
+        return new Response(dto);
     }
 }
