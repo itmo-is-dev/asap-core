@@ -38,7 +38,7 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
             .SingleOrDefaultAsync(cancellationToken);
 
         SubjectCourse subjectCourse = await _context.SubjectCourses
-            .GetByIdAsync(assignmentId, cancellationToken);
+            .GetByAssignmentId(assignmentId, cancellationToken);
 
         // If issuer is not a student, check if it is mentor and find student corresponding to the repository
         if (student is null)
