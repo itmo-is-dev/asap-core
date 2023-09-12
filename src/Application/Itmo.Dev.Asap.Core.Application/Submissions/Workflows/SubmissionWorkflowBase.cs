@@ -218,7 +218,7 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
             var groupAssignmentId = new GroupAssignmentId(student.Group.Id, subjectCourseAssignment.AssignmentId);
 
             GroupAssignment groupAssignment = await Context.GroupAssignments
-                .GetByIdsAsync(groupAssignmentId, cancellationToken);
+                .GetByIdAsync(groupAssignmentId, cancellationToken);
 
             submission = new Submission(
                 Guid.NewGuid(),

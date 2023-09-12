@@ -31,34 +31,31 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
     {
         (Guid issuerId, Guid studentId, Guid assignmentId, string payload) = request;
 
-        var studentQuery = StudentQuery.Build(x => x.WithId(request.StudentId).WithAssignmentId(assignmentId));
+        var studentQuery = StudentQuery.Build(x => x.WithId(studentId).WithAssignmentId(assignmentId));
 
         Student? student = await _context.Students
             .QueryAsync(studentQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken);
 
+        if (student is null)
+            throw EntityNotFoundException.For<Student>(studentId);
+
         SubjectCourse subjectCourse = await _context.SubjectCourses
             .GetByAssignmentId(assignmentId, cancellationToken);
 
-        // If issuer is not a student, check if it is mentor and find student corresponding to the repository
-        if (student is null)
+        if (student.UserId.Equals(issuerId) is false)
         {
-            Mentor? mentor = subjectCourse.Mentors.SingleOrDefault(x => x.UserId.Equals(issuerId));
+            var mentorQuery = MentorQuery.Build(x => x
+                .WithUserId(issuerId)
+                .WithSubjectCourseId(subjectCourse.Id));
 
-            if (mentor is not null)
+            Mentor? mentor = await _context.Mentors
+                .QueryAsync(mentorQuery, cancellationToken)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (mentor is null)
             {
-                studentQuery = StudentQuery.Build(x => x.WithSubjectCourseId(subjectCourse.Id));
-
-                student = await _context.Students
-                    .QueryAsync(studentQuery, cancellationToken)
-                    .SingleOrDefaultAsync(cancellationToken);
-
-                if (student is null)
-                    throw EntityNotFoundException.For<Student>(studentId);
-            }
-            else
-            {
-                throw EntityNotFoundException.UserNotFoundInSubjectCourse(studentId, subjectCourse.Title);
+                return new Response.Unauthorized();
             }
         }
 
@@ -68,7 +65,7 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
         }
 
         GroupAssignment groupAssignment = await _context.GroupAssignments
-            .GetByIdsAsync(student.Group.Id, assignmentId, cancellationToken);
+            .GetByIdAsync(student.Group.Id, assignmentId, cancellationToken);
 
         var submissionCountQuery = SubmissionQuery.Build(x => x
             .WithUserId(student.UserId)
@@ -94,6 +91,6 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
 
         SubmissionDto dto = submission.ToDto(points);
 
-        return new Response(dto);
+        return new Response.Success(dto);
     }
 }

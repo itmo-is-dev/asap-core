@@ -28,8 +28,6 @@ internal static partial class SubmissionServiceMapper
 
     public static partial BanResponse MapFrom(this BanSubmission.Response response);
 
-    public static partial CreateResponse MapFrom(this CreateSubmission.Response response);
-
     public static partial DeactivateResponse MapFrom(this DeactivateSubmission.Response response);
 
     public static partial DeleteResponse MapFrom(this DeleteSubmission.Response response);

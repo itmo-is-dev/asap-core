@@ -7,5 +7,12 @@ public static class CreateSubmission
 {
     public record Command(Guid IssuerId, Guid StudentId, Guid AssignmentId, string Payload) : IRequest<Response>;
 
-    public record Response(SubmissionDto Submission);
+    public abstract record Response
+    {
+        private Response() { }
+
+        public sealed record Success(SubmissionDto Submission) : Response;
+
+        public sealed record Unauthorized : Response;
+    }
 }

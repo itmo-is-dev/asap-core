@@ -42,7 +42,20 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         CreateSubmission.Command command = request.MapTo();
         CreateSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+        return response switch
+        {
+            CreateSubmission.Response.Success s => new CreateResponse
+            {
+                Success = new CreateResponse.Types.Success { Submission = s.Submission.MapToProtoSubmission() },
+            },
+
+            CreateSubmission.Response.Unauthorized => new CreateResponse
+            {
+                Unauthorized = new CreateResponse.Types.Unauthorized(),
+            },
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation produced unexpected result")),
+        };
     }
 
     public override async Task<DeactivateResponse> Deactivate(DeactivateRequest request, ServerCallContext context)

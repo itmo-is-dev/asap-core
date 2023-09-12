@@ -32,7 +32,7 @@ internal class UpdateGroupAssignmentDeadlineHandler : IRequestHandler<Command, R
     public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         GroupAssignment groupAssignment = await _context.GroupAssignments
-            .GetByIdsAsync(request.GroupId, request.AssignmentId, cancellationToken);
+            .GetByIdAsync(request.GroupId, request.AssignmentId, cancellationToken);
 
         SubjectCourse subjectCourse = await _context.SubjectCourses
             .GetByAssignmentId(groupAssignment.Id.AssignmentId, cancellationToken);
