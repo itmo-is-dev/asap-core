@@ -36,8 +36,6 @@ internal static partial class SubmissionServiceMapper
 
     public static partial MarkReviewedResponse MapFrom(this MarkSubmissionReviewed.Response response);
 
-    public static partial RateResponse MapFrom(this RateSubmission.Response response);
-
     public static partial SubmissionRate MapFrom(this SubmissionRateDto rateDto);
 
     private static Timestamp ToTimestamp(DateTime dateTime)

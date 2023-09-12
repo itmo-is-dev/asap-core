@@ -35,6 +35,6 @@ public class GetSubjectCourseStudentsTests : CoreDatabaseTestBase
         GetSubjectCourseStudents.Response response = await handler.Handle(query, default);
 
         // Assert
-        response.StudentIds.Should().HaveCount(subjectCourse.studentsCount);
+        response.Students.Should().HaveCount(subjectCourse.studentsCount);
     }
 }

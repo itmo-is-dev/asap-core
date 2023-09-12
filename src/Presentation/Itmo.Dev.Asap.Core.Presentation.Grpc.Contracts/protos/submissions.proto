@@ -83,7 +83,10 @@ message RateRequest {
 }
 
 message RateResponse {
-  SubmissionRate submission = 1;
+  oneof result {
+    SubmissionRate submission = 1;
+    string error_message = 2;
+  }
 }
 
 message UpdateRequest {

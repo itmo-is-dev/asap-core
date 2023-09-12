@@ -1,6 +1,7 @@
 using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
+using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 using Itmo.Dev.Asap.Core.Submissions;
 using MediatR;
@@ -68,10 +69,23 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
 
     public override async Task<RateResponse> Rate(RateRequest request, ServerCallContext context)
     {
-        RateSubmission.Command command = request.MapTo();
-        RateSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
+        try
+        {
+            RateSubmission.Command command = request.MapTo();
+            RateSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+            return new RateResponse
+            {
+                Submission = response.Submission.MapFrom(),
+            };
+        }
+        catch (DomainInvalidOperationException e)
+        {
+            return new RateResponse
+            {
+                ErrorMessage = e.Message,
+            };
+        }
     }
 
     public override async Task<UpdateResponse> Update(UpdateRequest request, ServerCallContext context)
