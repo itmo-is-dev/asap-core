@@ -1,4 +1,3 @@
-using Itmo.Dev.Asap.Core.Domain.Deadlines.DeadlinePenalties;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Students;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
@@ -69,19 +68,9 @@ public partial class StudentAssignment : IEntity
 
     private Points? GetEffectivePoints(Submission submission)
     {
-        if (submission.Rating is null)
-            return null;
-
-        Points points = Assignment.MaxPoints * submission.Rating.Value;
-        DeadlinePenalty? deadlinePenalty = GetEffectiveDeadlinePenalty(submission);
-
-        if (deadlinePenalty is not null)
-            points = deadlinePenalty.Apply(points);
-
-        if (submission.ExtraPoints is not null)
-            points += submission.ExtraPoints.Value;
-
-        return points;
+        return submission.Rating is not null
+            ? submission.CalculateRatedSubmission(Assignment, SubjectCourse.DeadlinePolicy).TotalPoints
+            : null;
     }
 
     private Points? GetPointPenalty(Submission submission)
@@ -98,15 +87,5 @@ public partial class StudentAssignment : IEntity
         Points? penaltyPoints = points - deadlineAppliedPoints;
 
         return penaltyPoints;
-    }
-
-    private DeadlinePenalty? GetEffectiveDeadlinePenalty(Submission submission)
-    {
-        GroupAssignments.GroupAssignment groupAssignment = GroupAssignments
-            .Single(ga => ga.Id.StudentGroupId.Equals(submission.GroupAssignment.Id.StudentGroupId));
-
-        DateOnly deadline = groupAssignment.Deadline;
-
-        return SubjectCourse.DeadlinePolicy.FindEffectiveDeadlinePenalty(deadline, submission.SubmissionDateOnly);
     }
 }
