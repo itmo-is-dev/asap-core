@@ -10,14 +10,16 @@ public static class ApplicationBuilderExtensions
         builder.UseEndpoints(x =>
         {
             x.MapGrpcService<AssignmentsController>();
+            x.MapGrpcService<PermissionsController>();
+            x.MapGrpcService<QueueController>();
             x.MapGrpcService<StudentController>();
             x.MapGrpcService<StudentGroupController>();
             x.MapGrpcService<SubjectController>();
             x.MapGrpcService<SubjectCourseController>();
             x.MapGrpcService<SubjectCourseGroupController>();
+            x.MapGrpcService<SubmissionController>();
+            x.MapGrpcService<SubmissionWorkflowController>();
             x.MapGrpcService<UserController>();
-            x.MapGrpcService<PermissionsController>();
-            x.MapGrpcService<QueueController>();
 
             x.MapGrpcReflectionService();
         });
