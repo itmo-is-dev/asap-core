@@ -11,5 +11,5 @@ internal static partial class SubmissionWorkflowMapper
     public static partial UpdatedResponse MapFrom(this SubmissionUpdateResult result);
 
     private static Timestamp ToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }
