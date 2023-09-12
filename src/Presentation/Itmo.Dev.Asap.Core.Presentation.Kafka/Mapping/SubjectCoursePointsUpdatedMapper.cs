@@ -33,7 +33,17 @@ internal static partial class SubjectCoursePointsUpdatedMapper
 
     private static partial SubjectCoursePointsUpdatedValue.Types.Student ToProto(this StudentDto student);
 
-    private static partial SubjectCoursePointsUpdatedValue.Types.StudentPoints ToProto(this StudentPointsDto pointsDto);
+    private static SubjectCoursePointsUpdatedValue.Types.StudentPoints ToProto(this StudentPointsDto pointsDto)
+    {
+        return new SubjectCoursePointsUpdatedValue.Types.StudentPoints
+        {
+            StudentId = pointsDto.Student.User.Id.ToString(),
+            Points = { pointsDto.Points.Select(MapToAssignmentPoints) },
+        };
+    }
+
+    private static partial SubjectCoursePointsUpdatedValue.Types.AssignmentPoints MapToAssignmentPoints(
+        AssignmentPointsDto source);
 
     private static Timestamp ToTimestamp(DateOnly dateOnly)
     {
