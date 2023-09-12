@@ -5,7 +5,6 @@ using Itmo.Dev.Asap.Core.Application.Factories;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Common.Resources;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
-using Itmo.Dev.Asap.Core.Domain.Study.GroupAssignments;
 using Itmo.Dev.Asap.Core.Domain.Study.SubjectCourses;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
@@ -42,11 +41,11 @@ public class ReviewOnlySubmissionWorkflow : SubmissionWorkflowBase
         Assignment assignment = await Context.Assignments
             .GetByIdAsync(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
 
-        GroupAssignment groupAssignment = await Context.GroupAssignments
-            .GetByIdsAsync(submission.GroupAssignment.Id, cancellationToken);
+        RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
 
-        SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory
-            .CreateFromSubmission(submission, subjectCourse, assignment, groupAssignment);
+        SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
+            ratedSubmission,
+            assignment);
 
         string message = UserCommandProcessingMessage.ReviewRatedSubmission(submissionRateDto.TotalPoints ?? 0);
 

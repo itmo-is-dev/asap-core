@@ -59,11 +59,11 @@ public class QueueService : IQueueService
                 x => x.GroupAssignment.Assignment.Id,
                 x => x.Id,
                 (s, a) => (s, a))
-            .Select(x => x.s.CalculateEffectivePoints(x.a, subjectCourse.DeadlinePolicy))
+            .Select(x => x.s.CalculateRatedSubmission(x.a, subjectCourse.DeadlinePolicy))
             .ToArray();
 
         SubmissionDto[] submissionDto = ratedSubmissions
-            .Select(x => x.Submission.ToDto(x.Points))
+            .Select(x => x.Submission.ToDto(x.TotalPoints))
             .ToArray();
 
         StudentDto[] students = ratedSubmissions

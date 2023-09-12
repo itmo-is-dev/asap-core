@@ -116,20 +116,15 @@ public partial class Submission : IEntity<Guid>
             ExtraPoints = extraPoints;
     }
 
-    public RatedSubmission CalculateEffectivePoints(Assignment assignment, DeadlinePolicy policy)
+    public RatedSubmission CalculateRatedSubmission(Assignment assignment, DeadlinePolicy policy)
     {
-        Points points = assignment.MaxPoints * (Rating ?? Fraction.None);
+        Points rawPoints = assignment.RatedWith(Rating);
+        Points pointsWithPenalty = policy.ApplyPointPenalty(rawPoints, GroupAssignment.Deadline, SubmissionDateOnly);
+        Points pointPenalty = rawPoints - pointsWithPenalty;
 
-        Points? penalty = policy.GetPointPenalty(points, GroupAssignment.Deadline, SubmissionDateOnly);
+        Points totalPoints = pointsWithPenalty + (ExtraPoints ?? Points.None);
 
-        if (penalty is not null)
-        {
-            points -= penalty.Value;
-        }
-
-        points += ExtraPoints ?? Points.None;
-
-        return new RatedSubmission(this, points);
+        return new RatedSubmission(this, totalPoints, pointsWithPenalty, pointPenalty, rawPoints);
     }
 
     public void UpdateDate(SpbDateTime newDate)

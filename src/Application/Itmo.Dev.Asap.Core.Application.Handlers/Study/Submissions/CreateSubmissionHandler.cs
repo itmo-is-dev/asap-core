@@ -90,7 +90,7 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
         Assignment assignment = await _context.Assignments
             .GetByIdAsync(submission.GroupAssignment.Assignment.Id, cancellationToken);
 
-        Points points = submission.CalculateEffectivePoints(assignment, subjectCourse.DeadlinePolicy).Points;
+        Points points = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy).TotalPoints;
 
         SubmissionDto dto = submission.ToDto(points);
 

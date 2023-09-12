@@ -6,7 +6,7 @@ namespace Itmo.Dev.Asap.Core.Mapping;
 
 public static class SubmissionMapping
 {
-    public static SubmissionDto ToDto(this Submission submission, Points points)
+    public static SubmissionDto ToDto(this Submission submission, Points totalPoints)
     {
         return new SubmissionDto(
             submission.Id,
@@ -16,7 +16,7 @@ public static class SubmissionMapping
             submission.GroupAssignment.Id.AssignmentId,
             submission.Payload,
             submission.ExtraPoints.AsDto(),
-            points.AsDto(),
+            Points: totalPoints.AsDto(),
             submission.GroupAssignment.Assignment.ShortName,
             submission.State.Kind.AsDto());
     }

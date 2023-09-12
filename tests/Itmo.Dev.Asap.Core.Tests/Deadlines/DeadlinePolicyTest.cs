@@ -36,14 +36,14 @@ public class DeadlinePolicyTest : TestBase
 
         var maxPoints = new Points(10);
 
-        Points? penaltyPoints1 = policy.GetPointPenalty(
+        Points? penaltyPoints1 = policy.ApplyPointPenalty(
             maxPoints,
             new DateOnly(2000, 10, 10),
             new DateOnly(2000, 10, 18));
 
         Assert.Equal(penaltyPoints1, maxPoints * fraction.Value);
 
-        Points? penaltyPoints2 = policy.GetPointPenalty(
+        Points? penaltyPoints2 = policy.ApplyPointPenalty(
             maxPoints,
             new DateOnly(2000, 10, 10),
             new DateOnly(2003, 1, 1));

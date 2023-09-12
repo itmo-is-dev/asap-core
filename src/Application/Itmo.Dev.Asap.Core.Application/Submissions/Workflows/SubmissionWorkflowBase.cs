@@ -65,11 +65,11 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
         Assignment assignment = await Context.Assignments
             .GetByIdAsync(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
 
-        GroupAssignment groupAssignment = await Context.GroupAssignments
-            .GetByIdsAsync(submission.GroupAssignment.Id, cancellationToken);
+        RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
 
-        SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory
-            .CreateFromSubmission(submission, subjectCourse, assignment, groupAssignment);
+        SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
+            ratedSubmission,
+            assignment);
 
         string message = UserCommandProcessingMessage.SubmissionMarkAsNotAccepted(submission.Code);
 
@@ -111,11 +111,11 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
         Assignment assignment = await Context.Assignments
             .GetByIdAsync(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
 
-        GroupAssignment groupAssignment = await Context.GroupAssignments
-            .GetByIdsAsync(submission.GroupAssignment.Id, cancellationToken);
+        RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
 
-        SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory
-            .CreateFromSubmission(submission, subjectCourse, assignment, groupAssignment);
+        SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
+            ratedSubmission,
+            assignment);
 
         string message = UserCommandProcessingMessage.SubmissionRated(submissionRateDto.ToDisplayString());
 
@@ -234,8 +234,13 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
             Assignment assignment = await Context.Assignments
                 .GetByIdAsync(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
 
-            SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory
-                .CreateFromSubmission(submission, subjectCourse, assignment, groupAssignment);
+            RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(
+                assignment,
+                subjectCourse.DeadlinePolicy);
+
+            SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
+                ratedSubmission,
+                assignment);
 
             return new SubmissionUpdateResult(submissionRateDto, true);
         }
@@ -255,11 +260,13 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
             if (triggeredByAnotherUser)
                 throw new UnauthorizedException("Submission updated by another user");
 
-            GroupAssignment groupAssignment = await Context.GroupAssignments
-                .GetByIdsAsync(submission.GroupAssignment.Id, cancellationToken);
+            RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(
+                assignment,
+                subjectCourse.DeadlinePolicy);
 
-            SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory
-                .CreateFromSubmission(submission, subjectCourse, assignment, groupAssignment);
+            SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
+                ratedSubmission,
+                assignment);
 
             return new SubmissionUpdateResult(submissionRateDto, false);
         }
@@ -269,11 +276,13 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
             Assignment assignment = await Context.Assignments
                 .GetByIdAsync(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
 
-            GroupAssignment groupAssignment = await Context.GroupAssignments
-                .GetByIdsAsync(submission.GroupAssignment.Id, cancellationToken);
+            RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(
+                assignment,
+                subjectCourse.DeadlinePolicy);
 
-            SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory
-                .CreateFromSubmission(submission, subjectCourse, assignment, groupAssignment);
+            SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
+                ratedSubmission,
+                assignment);
 
             return new SubmissionUpdateResult(submissionRateDto, false);
         }
@@ -307,7 +316,7 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
         DeadlinePolicy deadlinePolicy,
         CancellationToken cancellationToken)
     {
-        Points points = submission.CalculateEffectivePoints(assignment, deadlinePolicy).Points;
+        Points points = submission.CalculateRatedSubmission(assignment, deadlinePolicy).TotalPoints;
         var notification = new SubmissionUpdated.Notification(submission.ToDto(points));
 
         await _publisher.Publish(notification, cancellationToken);
