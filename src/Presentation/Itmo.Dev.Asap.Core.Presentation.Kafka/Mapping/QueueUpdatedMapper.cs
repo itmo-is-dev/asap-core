@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Queues.Notifications;
+using Itmo.Dev.Asap.Core.Application.Dto.Tables;
 using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Kafka;
 using Riok.Mapperly.Abstractions;
@@ -19,6 +20,9 @@ internal static partial class QueueUpdatedMapper
         return value;
     }
 
+    [MapProperty(
+        $"{nameof(QueueUpdated.Notification.SubmissionsQueue)}.{nameof(SubmissionsQueueDto.GroupName)}",
+        nameof(QueueUpdatedValue.StudentGroupName))]
     private static partial QueueUpdatedValue MapToQueueUpdatedValue(this QueueUpdated.Notification notification);
 
     private static partial QueueUpdatedValue.Types.Student MapToStudent(this StudentDto student);
