@@ -106,9 +106,19 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
                 request.RatingPercent,
                 request.ExtraPoints);
 
-            UpdateSubmissionPoints.Response response = await _mediator.Send(command, context.CancellationToken);
+            try
+            {
+                UpdateSubmissionPoints.Response response = await _mediator.Send(command, context.CancellationToken);
 
-            rateDto = response.Submission;
+                rateDto = response.Submission;
+            }
+            catch (DomainInvalidOperationException e)
+            {
+                return new UpdateResponse
+                {
+                    ErrorMessage = e.Message,
+                };
+            }
         }
 
         if (request.SubmissionDateCase is UpdateRequest.SubmissionDateOneofCase.SubmissionDateValue)
@@ -120,9 +130,19 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
                 request.Code,
                 request.SubmissionDateValue.MapToDateOnly());
 
-            UpdateSubmissionDate.Response response = await _mediator.Send(command, context.CancellationToken);
+            try
+            {
+                UpdateSubmissionDate.Response response = await _mediator.Send(command, context.CancellationToken);
 
-            rateDto = response.Submission;
+                rateDto = response.Submission;
+            }
+            catch (DomainInvalidOperationException e)
+            {
+                return new UpdateResponse
+                {
+                    ErrorMessage = e.Message,
+                };
+            }
         }
 
         if (rateDto is null)
