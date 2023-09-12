@@ -19,6 +19,8 @@ public partial class Submission : IEntity<Guid>
         SpbDateTime submissionDate,
         string payload,
         GroupAssignment groupAssignment,
+        Fraction? rating,
+        Points? extraPoints,
         ISubmissionState state)
         : this(id)
     {
@@ -29,8 +31,8 @@ public partial class Submission : IEntity<Guid>
 
         GroupAssignment = groupAssignment;
 
-        Rating = default;
-        ExtraPoints = default;
+        Rating = rating;
+        ExtraPoints = extraPoints;
 
         State = state;
     }
@@ -49,6 +51,8 @@ public partial class Submission : IEntity<Guid>
             submissionDate,
             payload,
             groupAssignment,
+            rating: default,
+            extraPoints: default,
             new ActiveSubmissionState()) { }
 
     public int Code { get; }

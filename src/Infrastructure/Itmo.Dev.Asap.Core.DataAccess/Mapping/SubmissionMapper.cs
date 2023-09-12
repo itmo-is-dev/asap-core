@@ -37,6 +37,8 @@ public static class SubmissionMapper
             model.SubmissionDate,
             model.Payload,
             groupAssignment,
+            model.Rating,
+            model.ExtraPoints,
             state);
     }
 
