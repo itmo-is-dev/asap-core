@@ -10,6 +10,7 @@ using Itmo.Dev.Asap.Core.Domain.Submissions;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using static Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands.UpdateSubmissionDate;
 
 namespace Itmo.Dev.Asap.Core.Application.Handlers.Study.Submissions;
@@ -19,15 +20,18 @@ internal class UpdateSubmissionDateHandler : IRequestHandler<Command, Response>
     private readonly IPersistenceContext _context;
     private readonly IPermissionValidator _permissionValidator;
     private readonly IPublisher _publisher;
+    private readonly ILogger<UpdateSubmissionDateHandler> _logger;
 
     public UpdateSubmissionDateHandler(
         IPermissionValidator permissionValidator,
         IPersistenceContext context,
-        IPublisher publisher)
+        IPublisher publisher,
+        ILogger<UpdateSubmissionDateHandler> logger)
     {
         _permissionValidator = permissionValidator;
         _context = context;
         _publisher = publisher;
+        _logger = logger;
     }
 
     public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
@@ -43,6 +47,11 @@ internal class UpdateSubmissionDateHandler : IRequestHandler<Command, Response>
         var date = SpbDateTime.FromDateOnly(request.Date);
         submission.UpdateDate(date);
 
+        _logger.LogInformation(
+            "Updated submission date, Id = {Id}, Date = {Date}",
+            submission.Id,
+            submission.SubmissionDateOnly);
+
         _context.Submissions.Update(submission);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -54,9 +63,13 @@ internal class UpdateSubmissionDateHandler : IRequestHandler<Command, Response>
 
         RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
 
+        _logger.LogInformation("Calculated rated submission = {RatedSubmission}", ratedSubmission);
+
         SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
             ratedSubmission,
             assignment);
+
+        _logger.LogInformation("Calculated submission rate dto = {Submission}", submissionRateDto);
 
         var notification = new SubmissionUpdated.Notification(submission.ToDto(ratedSubmission.TotalPoints));
         await _publisher.PublishAsync(notification, cancellationToken);

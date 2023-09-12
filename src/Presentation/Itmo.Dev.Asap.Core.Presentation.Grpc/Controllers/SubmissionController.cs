@@ -2,19 +2,23 @@ using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
 using Itmo.Dev.Asap.Core.Common.Exceptions;
+using Itmo.Dev.Asap.Core.Models;
 using Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 using Itmo.Dev.Asap.Core.Submissions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Controllers;
 
 public class SubmissionController : SubmissionService.SubmissionServiceBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<SubmissionController> _logger;
 
-    public SubmissionController(IMediator mediator)
+    public SubmissionController(IMediator mediator, ILogger<SubmissionController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     public override async Task<ActivateResponse> Activate(ActivateRequest request, ServerCallContext context)
@@ -124,6 +128,10 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         if (rateDto is null)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "No update command was executed"));
 
-        return new UpdateResponse { Submission = rateDto.MapFrom() };
+        SubmissionRate dto = rateDto.MapFrom();
+
+        _logger.LogInformation("Returning submission rate = {Rate}", dto);
+
+        return new UpdateResponse { Submission = dto };
     }
 }
