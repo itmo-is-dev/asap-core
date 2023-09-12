@@ -1,3 +1,4 @@
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Notifications;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
@@ -10,7 +11,6 @@ using Itmo.Dev.Asap.Core.Domain.Study.SubjectCourses;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Domain.Users;
-using Itmo.Dev.Asap.Core.Domain.ValueObject;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
 using static Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands.CreateSubmission;
@@ -21,10 +21,12 @@ namespace Itmo.Dev.Asap.Core.Application.Handlers.Study.Submissions;
 internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
 {
     private readonly IPersistenceContext _context;
+    private readonly IPublisher _publisher;
 
-    public CreateSubmissionHandler(IPersistenceContext context)
+    public CreateSubmissionHandler(IPersistenceContext context, IPublisher publisher)
     {
         _context = context;
+        _publisher = publisher;
     }
 
     public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
@@ -87,9 +89,11 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
         Assignment assignment = await _context.Assignments
             .GetByIdAsync(submission.GroupAssignment.Assignment.Id, cancellationToken);
 
-        Points points = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy).TotalPoints;
+        RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
+        SubmissionDto dto = submission.ToDto(ratedSubmission.TotalPoints);
 
-        SubmissionDto dto = submission.ToDto(points);
+        var evt = new SubmissionUpdated.Notification(dto);
+        await _publisher.Publish(evt, default);
 
         return new Response.Success(dto);
     }

@@ -1,3 +1,4 @@
+using Google.Protobuf.WellKnownTypes;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Models;
@@ -16,4 +17,7 @@ public static partial class ProtoMapper
     public static partial Student MapToProtoStudent(this StudentDto student);
 
     public static partial Submission MapToProtoSubmission(this SubmissionDto submission);
+
+    private static Timestamp MapToTimestamp(DateTime dateTime)
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }
