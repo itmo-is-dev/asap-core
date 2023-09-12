@@ -36,5 +36,8 @@ internal static partial class SubjectCoursePointsUpdatedMapper
     private static partial SubjectCoursePointsUpdatedValue.Types.StudentPoints ToProto(this StudentPointsDto pointsDto);
 
     private static Timestamp ToTimestamp(DateOnly dateOnly)
-        => Timestamp.FromDateTime(dateOnly.ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.Zero)));
+    {
+        var dateTime = dateOnly.ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.Zero));
+        return Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
+    }
 }

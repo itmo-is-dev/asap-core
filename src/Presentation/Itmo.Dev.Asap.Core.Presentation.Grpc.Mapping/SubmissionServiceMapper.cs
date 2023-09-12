@@ -39,5 +39,5 @@ internal static partial class SubmissionServiceMapper
     public static partial SubmissionRate MapFrom(this SubmissionRateDto rateDto);
 
     private static Timestamp ToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }

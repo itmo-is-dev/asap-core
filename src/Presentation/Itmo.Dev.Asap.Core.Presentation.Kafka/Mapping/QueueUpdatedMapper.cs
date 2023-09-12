@@ -24,7 +24,7 @@ internal static partial class QueueUpdatedMapper
     private static partial QueueUpdatedValue.Types.Student MapToStudent(this StudentDto student);
 
     private static Timestamp MapToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 
     private static void MapToStudents(
         IDictionary<string, QueueUpdatedValue.Types.Student> field,
