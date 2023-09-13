@@ -6,6 +6,7 @@ using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Queries;
 using Itmo.Dev.Asap.Core.SubjectCourses;
 using Riok.Mapperly.Abstractions;
+using System.Text.Json;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 
@@ -50,4 +51,10 @@ internal static partial class SubjectCourseServiceMapper
 
     private static Timestamp MapToTimestamp(DateTime dateTime)
         => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
+
+    private static GetSubjectCourseStudents.PageToken? MapStringToGetStudentsPageToken(string? str)
+        => str is null ? null : JsonSerializer.Deserialize<GetSubjectCourseStudents.PageToken>(str);
+
+    private static string? MapGetStudentsPageTokenToString(GetSubjectCourseStudents.PageToken? token)
+        => token is null ? null : JsonSerializer.Serialize(token);
 }

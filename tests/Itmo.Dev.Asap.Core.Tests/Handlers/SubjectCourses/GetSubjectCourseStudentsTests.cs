@@ -28,7 +28,7 @@ public class GetSubjectCourseStudentsTests : CoreDatabaseTestBase
             .Where(x => x.studentsCount != 0)
             .FirstAsync();
 
-        var query = new GetSubjectCourseStudents.Query(subjectCourse.id);
+        var query = new GetSubjectCourseStudents.Query(subjectCourse.id, null, int.MaxValue);
         var handler = new GetSubjectCourseStudentsHandler(PersistenceContext);
 
         // Act
