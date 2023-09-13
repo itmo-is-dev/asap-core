@@ -6,6 +6,7 @@ using Itmo.Dev.Asap.Core.Application.Dto.SubjectCourses;
 using Itmo.Dev.Asap.Core.Application.Dto.Tables;
 using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Application.Extensions;
+using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Students;
 using Itmo.Dev.Asap.Core.Domain.Study;
 using Itmo.Dev.Asap.Core.Mapping;
@@ -41,11 +42,10 @@ public class SubjectCourseService : ISubjectCourseService
             .ThenBy(x => _userFullNameFormatter.GetFullName(x.Student.User))
             .ToArray();
 
-        AssignmentDto[] assignments = studentAssignments
-            .Select(x => x.Assignment)
-            .Distinct()
+        AssignmentDto[] assignments = await _context.Assignments
+            .FindBySubjectCourseId(subjectCourseId, cancellationToken)
             .Select(x => x.ToDto())
-            .ToArray();
+            .ToArrayAsync(cancellationToken);
 
         return new SubjectCoursePointsDto(assignments, studentPoints);
     }

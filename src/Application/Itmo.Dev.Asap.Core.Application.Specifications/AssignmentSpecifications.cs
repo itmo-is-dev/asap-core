@@ -29,4 +29,13 @@ public static class AssignmentSpecifications
         var query = AssignmentQuery.Build(x => x.WithIds(ids));
         return repository.QueryAsync(query, cancellationToken);
     }
+
+    public static IAsyncEnumerable<Assignment> FindBySubjectCourseId(
+        this IAssignmentRepository repository,
+        Guid subjectCourseId,
+        CancellationToken cancellationToken)
+    {
+        var query = AssignmentQuery.Build(x => x.WithSubjectCourseId(subjectCourseId));
+        return repository.QueryAsync(query, cancellationToken);
+    }
 }
