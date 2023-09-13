@@ -118,11 +118,6 @@ public class SubmissionRepository : ISubmissionRepository
                     .Contains(x.GroupAssignment.Assignment.SubjectCourse.WorkflowType!.Value));
         }
 
-        if (query.Limit is not null)
-        {
-            queryable = queryable.Take(query.Limit.Value);
-        }
-
         if (query.OrderByCode is not null)
         {
             queryable = query.OrderByCode.Value switch
@@ -131,6 +126,11 @@ public class SubmissionRepository : ISubmissionRepository
                 OrderDirection.Descending => queryable.OrderByDescending(x => x.Code),
                 _ => throw new ArgumentOutOfRangeException(nameof(query)),
             };
+        }
+
+        if (query.Limit is not null)
+        {
+            queryable = queryable.Take(query.Limit.Value);
         }
 
         return queryable;

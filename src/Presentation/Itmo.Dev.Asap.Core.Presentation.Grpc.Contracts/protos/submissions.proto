@@ -45,7 +45,17 @@ message CreateRequest {
 }
 
 message CreateResponse {
-  Submission submission = 1;
+  oneof result {
+    Success success = 1;
+    Unauthorized unauthorized = 2;
+  }
+  
+  message Success {
+    Submission submission = 1;
+  }
+  
+  message Unauthorized{
+  }
 }
 
 message DeactivateRequest {
@@ -83,7 +93,10 @@ message RateRequest {
 }
 
 message RateResponse {
-  SubmissionRate submission = 1;
+  oneof result {
+    SubmissionRate submission = 1;
+    string error_message = 2;
+  }
 }
 
 message UpdateRequest {
@@ -101,5 +114,8 @@ message UpdateRequest {
 }
 
 message UpdateResponse {
-  SubmissionRate submission = 1;
+  oneof result {
+    SubmissionRate submission = 1;
+    string error_message = 2;
+  }
 }

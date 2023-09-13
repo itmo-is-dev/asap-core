@@ -1,4 +1,3 @@
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Contracts.Students.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Students.Queries;
@@ -18,20 +17,30 @@ public class StudentController : StudentService.StudentServiceBase
         _mediator = mediator;
     }
 
-    public override async Task<CreateStudentResponse> Create(CreateStudentRequest request, ServerCallContext context)
+    public override async Task<CreateStudentsResponse> Create(CreateStudentsRequest request, ServerCallContext context)
     {
-        CreateStudent.Command command = request.MapTo();
-        CreateStudent.Response response = await _mediator.Send(command, context.CancellationToken);
+        CreateStudents.Command command = request.MapTo();
+        CreateStudents.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+        return response switch
+        {
+            CreateStudents.Response.Success s => s.MapFrom(),
+
+            CreateStudents.Response.GroupsNotFound e => throw new RpcException(
+                new Status(StatusCode.NotFound, $"Not found groups: {string.Join(", ", e.GroupIds)}")),
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation produced unexpected result")),
+        };
     }
 
-    public override async Task<Empty> DismissFromGroup(DismissFromGroupRequest request, ServerCallContext context)
+    public override async Task<DismissFromGroupResponse> DismissFromGroup(
+        DismissFromGroupRequest request,
+        ServerCallContext context)
     {
         DismissStudentFromGroup.Command command = request.MapTo();
-        await _mediator.Send(command);
+        DismissStudentFromGroup.Response response = await _mediator.Send(command);
 
-        return new Empty();
+        return response.MapFrom();
     }
 
     public override async Task<TransferStudentResponse> Transfer(

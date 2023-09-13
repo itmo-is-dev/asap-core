@@ -49,5 +49,5 @@ internal static partial class SubjectCourseServiceMapper
         => duration.ToTimeSpan();
 
     private static Timestamp MapToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }

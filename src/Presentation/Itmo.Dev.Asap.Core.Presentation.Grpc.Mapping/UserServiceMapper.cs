@@ -24,8 +24,10 @@ internal static partial class UserServiceMapper
 
     public static partial CreateResponse MapFrom(this CreateUser.Response response);
 
+    [MapProperty(nameof(FindUserByUniversityId.Response.User), nameof(FindByUniversityIdResponse.UserValue))]
     public static partial FindByUniversityIdResponse MapFrom(this FindUserByUniversityId.Response response);
 
+    [MapProperty(nameof(FindUserById.Response.User), nameof(FindByIdResponse.UserValue))]
     public static partial FindByIdResponse MapFrom(this FindUserById.Response response);
 
     public static partial UpdateUniversityIdResponse MapFrom(this UpdateUserUniversityId.Response response);

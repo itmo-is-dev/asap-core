@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
+using Itmo.Dev.Asap.Core.Models;
 using Itmo.Dev.Asap.Core.SubmissionWorkflow;
 using Riok.Mapperly.Abstractions;
 
@@ -10,6 +11,9 @@ internal static partial class SubmissionWorkflowMapper
 {
     public static partial UpdatedResponse MapFrom(this SubmissionUpdateResult result);
 
+    [MapProperty(nameof(SubmissionRateDto.Id), nameof(SubmissionRate.SubmissionId))]
+    private static partial SubmissionRate MapToSubmissionRate(SubmissionRateDto rate);
+
     private static Timestamp ToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }

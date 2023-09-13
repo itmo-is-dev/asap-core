@@ -48,7 +48,7 @@ internal class DeleteSubmissionHandler : IRequestHandler<Command, Response>
         SubjectCourse subjectCourse = await _context.SubjectCourses
             .GetByAssignmentId(assignment.Id, cancellationToken);
 
-        Points points = submission.CalculateEffectivePoints(assignment, subjectCourse.DeadlinePolicy).Points;
+        Points points = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy).TotalPoints;
 
         SubmissionDto dto = submission.ToDto(points);
 

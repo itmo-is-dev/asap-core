@@ -3,6 +3,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);CA1506;</NoWarn>
         <UserSecretsId>40b072b4-7392-42ad-8dc2-07ad18092b6d</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -34,8 +35,11 @@
         <Content Update="appsettings.Production.json">
             <DependentUpon>appsettings.json</DependentUpon>
         </Content>
-        <Content Update="appsettings.Stagging.json">
+        <Content Update="appsettings.Staging.json">
             <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+        <Content Include="..\..\.dockerignore">
+          <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
 

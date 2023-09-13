@@ -1,19 +1,24 @@
 using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
+using Itmo.Dev.Asap.Core.Common.Exceptions;
+using Itmo.Dev.Asap.Core.Models;
 using Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 using Itmo.Dev.Asap.Core.Submissions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Controllers;
 
 public class SubmissionController : SubmissionService.SubmissionServiceBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<SubmissionController> _logger;
 
-    public SubmissionController(IMediator mediator)
+    public SubmissionController(IMediator mediator, ILogger<SubmissionController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     public override async Task<ActivateResponse> Activate(ActivateRequest request, ServerCallContext context)
@@ -37,7 +42,20 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         CreateSubmission.Command command = request.MapTo();
         CreateSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+        return response switch
+        {
+            CreateSubmission.Response.Success s => new CreateResponse
+            {
+                Success = new CreateResponse.Types.Success { Submission = s.Submission.MapToProtoSubmission() },
+            },
+
+            CreateSubmission.Response.Unauthorized => new CreateResponse
+            {
+                Unauthorized = new CreateResponse.Types.Unauthorized(),
+            },
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation produced unexpected result")),
+        };
     }
 
     public override async Task<DeactivateResponse> Deactivate(DeactivateRequest request, ServerCallContext context)
@@ -68,10 +86,23 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
 
     public override async Task<RateResponse> Rate(RateRequest request, ServerCallContext context)
     {
-        RateSubmission.Command command = request.MapTo();
-        RateSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
+        try
+        {
+            RateSubmission.Command command = request.MapTo();
+            RateSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+            return new RateResponse
+            {
+                Submission = response.Submission.MapFrom(),
+            };
+        }
+        catch (DomainInvalidOperationException e)
+        {
+            return new RateResponse
+            {
+                ErrorMessage = e.Message,
+            };
+        }
     }
 
     public override async Task<UpdateResponse> Update(UpdateRequest request, ServerCallContext context)
@@ -88,9 +119,19 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
                 request.RatingPercent,
                 request.ExtraPoints);
 
-            UpdateSubmissionPoints.Response response = await _mediator.Send(command, context.CancellationToken);
+            try
+            {
+                UpdateSubmissionPoints.Response response = await _mediator.Send(command, context.CancellationToken);
 
-            rateDto = response.Submission;
+                rateDto = response.Submission;
+            }
+            catch (DomainInvalidOperationException e)
+            {
+                return new UpdateResponse
+                {
+                    ErrorMessage = e.Message,
+                };
+            }
         }
 
         if (request.SubmissionDateCase is UpdateRequest.SubmissionDateOneofCase.SubmissionDateValue)
@@ -102,14 +143,28 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
                 request.Code,
                 request.SubmissionDateValue.MapToDateOnly());
 
-            UpdateSubmissionDate.Response response = await _mediator.Send(command, context.CancellationToken);
+            try
+            {
+                UpdateSubmissionDate.Response response = await _mediator.Send(command, context.CancellationToken);
 
-            rateDto = response.Submission;
+                rateDto = response.Submission;
+            }
+            catch (DomainInvalidOperationException e)
+            {
+                return new UpdateResponse
+                {
+                    ErrorMessage = e.Message,
+                };
+            }
         }
 
         if (rateDto is null)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "No update command was executed"));
 
-        return new UpdateResponse { Submission = rateDto.MapFrom() };
+        SubmissionRate dto = rateDto.MapFrom();
+
+        _logger.LogInformation("Returning submission rate = {Rate}", dto);
+
+        return new UpdateResponse { Submission = dto };
     }
 }

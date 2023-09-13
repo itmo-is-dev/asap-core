@@ -21,14 +21,10 @@ public class DeadlinePolicy
             throw new DomainInvalidOperationException("Deadline penalty with specified span already exists");
     }
 
-    public Points? GetPointPenalty(Points? points, DateOnly deadline, DateOnly submissionDate)
+    public Points ApplyPointPenalty(Points points, DateOnly deadline, DateOnly submissionDate)
     {
-        if (points is null)
-            return null;
-
         DeadlinePenalty? deadlinePenalty = FindEffectiveDeadlinePenalty(deadline, submissionDate);
-
-        return deadlinePenalty?.Apply(points.Value);
+        return deadlinePenalty?.Apply(points.Value) ?? points;
     }
 
     public DeadlinePenalty? FindEffectiveDeadlinePenalty(DateOnly deadline, DateOnly submissionDate)

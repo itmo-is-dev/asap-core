@@ -65,10 +65,10 @@ public class UserRepository : RepositoryBase<User, UserModel>, IUserRepository
         {
             string[] patterns = query.FullNamePatterns.Select(pattern => $"%{pattern}%").ToArray();
 
-            queryable = queryable.Where(user => patterns.Any(pattern =>
-                EF.Functions.ILike(user.FirstName, pattern)
-                || EF.Functions.ILike(user.MiddleName, pattern)
-                || EF.Functions.ILike(user.LastName, pattern)));
+            queryable = queryable.Where(user =>
+                patterns.Any(pattern => EF.Functions.ILike(user.FirstName, pattern))
+                || patterns.Any(pattern => EF.Functions.ILike(user.MiddleName, pattern))
+                || patterns.Any(pattern => EF.Functions.ILike(user.LastName, pattern)));
         }
 
         if (query.UniversityIds is not [])

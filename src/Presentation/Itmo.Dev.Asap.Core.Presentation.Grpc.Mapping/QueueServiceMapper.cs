@@ -11,5 +11,5 @@ internal static partial class QueueServiceMapper
     public static partial QueueUpdatedResponse.Types.Submission MapToProtoQueueSubmission(this SubmissionDto submission);
 
     private static Timestamp MapToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }

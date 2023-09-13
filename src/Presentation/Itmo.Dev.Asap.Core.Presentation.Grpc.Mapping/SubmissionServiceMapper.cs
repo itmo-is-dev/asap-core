@@ -28,18 +28,15 @@ internal static partial class SubmissionServiceMapper
 
     public static partial BanResponse MapFrom(this BanSubmission.Response response);
 
-    public static partial CreateResponse MapFrom(this CreateSubmission.Response response);
-
     public static partial DeactivateResponse MapFrom(this DeactivateSubmission.Response response);
 
     public static partial DeleteResponse MapFrom(this DeleteSubmission.Response response);
 
     public static partial MarkReviewedResponse MapFrom(this MarkSubmissionReviewed.Response response);
 
-    public static partial RateResponse MapFrom(this RateSubmission.Response response);
-
+    [MapProperty(nameof(SubmissionRateDto.Id), nameof(SubmissionRate.SubmissionId))]
     public static partial SubmissionRate MapFrom(this SubmissionRateDto rateDto);
 
     private static Timestamp ToTimestamp(DateTime dateTime)
-        => Timestamp.FromDateTime(dateTime);
+        => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
 }
