@@ -81,11 +81,11 @@ public class StudentRepository : RepositoryBase<Student, StudentModel>, IStudent
                 || patterns.Any(pattern => EF.Functions.ILike(student.User.LastName, pattern)));
         }
 
+        queryable = queryable.OrderBy(x => x.UserId);
+
         if (query.Cursor is not null)
         {
-            queryable = queryable
-                .OrderBy(x => x.UserId)
-                .Where(x => x.UserId > query.Cursor);
+            queryable = queryable.Where(x => x.UserId > query.Cursor);
         }
 
         if (query.Limit is not null)
