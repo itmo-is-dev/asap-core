@@ -94,7 +94,7 @@ public class SubjectCourseController : SubjectCourseService.SubjectCourseService
             Guid.Parse(request.SubjectCourseId),
             Guid.Parse(request.StudentGroupId));
 
-        await _mediator.Send(notification, context.CancellationToken);
+        await _mediator.Publish(notification, context.CancellationToken);
 
         return new Empty();
     }
