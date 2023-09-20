@@ -6,7 +6,6 @@ using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
 using Itmo.Dev.Asap.Core.Domain.Study.SubjectCourses;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
-using Itmo.Dev.Asap.Core.Domain.ValueObject;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
 using static Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands.MarkSubmissionReviewed;
@@ -48,9 +47,8 @@ internal class MarkSubmissionReviewedHandler : IRequestHandler<Command, Response
         SubjectCourse subjectCourse = await _context.SubjectCourses
             .GetByAssignmentId(assignment.Id, cancellationToken);
 
-        Points points = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy).TotalPoints;
-
-        SubmissionDto dto = submission.ToDto(points);
+        RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
+        SubmissionDto dto = ratedSubmission.ToDto();
 
         var notification = new SubmissionStateUpdated.Notification(dto);
         await _publisher.PublishAsync(notification, cancellationToken);

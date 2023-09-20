@@ -90,7 +90,7 @@ internal class CreateSubmissionHandler : IRequestHandler<Command, Response>
             .GetByIdAsync(submission.GroupAssignment.Assignment.Id, cancellationToken);
 
         RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
-        SubmissionDto dto = submission.ToDto(ratedSubmission.TotalPoints);
+        SubmissionDto dto = ratedSubmission.ToDto();
 
         var evt = new SubmissionUpdated.Notification(dto);
         await _publisher.Publish(evt, default);

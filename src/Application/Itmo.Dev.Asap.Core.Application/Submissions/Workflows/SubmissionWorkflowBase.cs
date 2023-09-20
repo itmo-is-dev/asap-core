@@ -4,12 +4,12 @@ using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Notifications;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Models;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
+using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
 using Itmo.Dev.Asap.Core.Application.Factories;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Common.Resources;
-using Itmo.Dev.Asap.Core.Domain.Deadlines.DeadlinePolicies;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Students;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
@@ -238,6 +238,11 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
                 assignment,
                 subjectCourse.DeadlinePolicy);
 
+            SubmissionDto dto = ratedSubmission.ToDto();
+
+            var notification = new SubmissionStateUpdated.Notification(dto);
+            await _publisher.PublishAsync(notification, default);
+
             SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
                 ratedSubmission,
                 assignment);
@@ -255,14 +260,16 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
             Assignment assignment = await Context.Assignments
                 .GetByIdAsync(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
 
-            await NotifySubmissionUpdated(submission, assignment, subjectCourse.DeadlinePolicy, cancellationToken);
-
-            if (triggeredByAnotherUser)
-                throw new UnauthorizedException("Submission updated by another user");
-
             RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(
                 assignment,
                 subjectCourse.DeadlinePolicy);
+
+            SubmissionDto dto = ratedSubmission.ToDto();
+
+            await NotifySubmissionUpdated(dto, cancellationToken);
+
+            if (triggeredByAnotherUser)
+                throw new UnauthorizedException("Submission updated by another user");
 
             SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
                 ratedSubmission,
@@ -279,6 +286,9 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
             RatedSubmission ratedSubmission = submission.CalculateRatedSubmission(
                 assignment,
                 subjectCourse.DeadlinePolicy);
+
+            SubmissionDto dto = ratedSubmission.ToDto();
+            await NotifySubmissionUpdated(dto, cancellationToken);
 
             SubmissionRateDto submissionRateDto = SubmissionRateDtoFactory.CreateFromRatedSubmission(
                 ratedSubmission,
@@ -305,20 +315,19 @@ public abstract class SubmissionWorkflowBase : ISubmissionWorkflow
         SubjectCourse subjectCourse = await Context.SubjectCourses
             .GetByAssignmentId(submission.GroupAssignment.Assignment.Id, cancellationToken);
 
-        await NotifySubmissionUpdated(submission, assignment, subjectCourse.DeadlinePolicy, cancellationToken);
+        RatedSubmission rated = submission.CalculateRatedSubmission(assignment, subjectCourse.DeadlinePolicy);
+        SubmissionDto dto = rated.ToDto();
+
+        await NotifySubmissionUpdated(dto, cancellationToken);
 
         return submission;
     }
 
     protected async Task NotifySubmissionUpdated(
-        Submission submission,
-        Assignment assignment,
-        DeadlinePolicy deadlinePolicy,
+        SubmissionDto submission,
         CancellationToken cancellationToken)
     {
-        Points points = submission.CalculateRatedSubmission(assignment, deadlinePolicy).TotalPoints;
-        var notification = new SubmissionUpdated.Notification(submission.ToDto(points));
-
+        var notification = new SubmissionUpdated.Notification(submission);
         await _publisher.Publish(notification, cancellationToken);
     }
 }

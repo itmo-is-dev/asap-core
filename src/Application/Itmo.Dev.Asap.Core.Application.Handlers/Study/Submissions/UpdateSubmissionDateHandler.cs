@@ -71,7 +71,7 @@ internal class UpdateSubmissionDateHandler : IRequestHandler<Command, Response>
 
         _logger.LogInformation("Calculated submission rate dto = {Submission}", submissionRateDto);
 
-        var notification = new SubmissionUpdated.Notification(submission.ToDto(ratedSubmission.TotalPoints));
+        var notification = new SubmissionUpdated.Notification(ratedSubmission.ToDto());
         await _publisher.PublishAsync(notification, cancellationToken);
 
         return new Response(submissionRateDto);
