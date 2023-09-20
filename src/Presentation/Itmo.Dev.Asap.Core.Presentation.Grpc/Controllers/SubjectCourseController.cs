@@ -3,6 +3,7 @@ using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Abstractions.SubjectCourses;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Assignments.Queries;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Queues.Queries;
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Notifications;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Queries;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Queries;
@@ -85,6 +86,19 @@ public class SubjectCourseController : SubjectCourseService.SubjectCourseService
         return response.MapFrom();
     }
 
+    public override async Task<Empty> ForceSyncStudentGroupQueue(
+        ForceSyncStudentGroupQueueRequest request,
+        ServerCallContext context)
+    {
+        var notification = new SubjectCourseGroupQueueOutdated.Notification(
+            Guid.Parse(request.SubjectCourseId),
+            Guid.Parse(request.StudentGroupId));
+
+        await _mediator.Send(notification, context.CancellationToken);
+
+        return new Empty();
+    }
+
     public override async Task<Empty> AddDeadline(AddDeadlineRequest request, ServerCallContext context)
     {
         AddFractionDeadlinePolicy.Command command = request.MapTo();
@@ -100,7 +114,9 @@ public class SubjectCourseController : SubjectCourseService.SubjectCourseService
         return Task.FromResult(new Empty());
     }
 
-    public override async Task<UpdateMentorsResponse> UpdateMentors(UpdateMentorsRequest request, ServerCallContext context)
+    public override async Task<UpdateMentorsResponse> UpdateMentors(
+        UpdateMentorsRequest request,
+        ServerCallContext context)
     {
         UpdateMentors.Command command = request.MapTo();
         await _mediator.Send(command, context.CancellationToken);

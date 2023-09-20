@@ -4,8 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Itmo.Dev.Asap.Core.Application.Handlers.Study.Queues;
 
-internal class UpdateQueueCacheNotificationHandler
-    : INotificationHandler<QueueUpdated.Notification>
+internal class UpdateQueueCacheNotificationHandler : INotificationHandler<QueueUpdated.Notification>
 {
     private readonly IMemoryCache _cache;
 
