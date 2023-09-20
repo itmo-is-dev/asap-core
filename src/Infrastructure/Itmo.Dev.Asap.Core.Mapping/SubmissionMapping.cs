@@ -1,23 +1,22 @@
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
-using Itmo.Dev.Asap.Core.Domain.ValueObject;
 
 namespace Itmo.Dev.Asap.Core.Mapping;
 
 public static class SubmissionMapping
 {
-    public static SubmissionDto ToDto(this Submission submission, Points totalPoints)
+    public static SubmissionDto ToDto(this RatedSubmission submission)
     {
         return new SubmissionDto(
-            submission.Id,
-            submission.Code,
-            submission.SubmissionDate.AsUtcDateTime(),
-            submission.Student.UserId,
-            submission.GroupAssignment.Id.AssignmentId,
-            submission.Payload,
-            submission.ExtraPoints.AsDto(),
-            Points: totalPoints.AsDto(),
-            submission.GroupAssignment.Assignment.ShortName,
-            submission.State.Kind.AsDto());
+            submission.Submission.Id,
+            submission.Submission.Code,
+            submission.Submission.SubmissionDate.AsUtcDateTime(),
+            submission.Submission.Student.UserId,
+            submission.Submission.GroupAssignment.Id.AssignmentId,
+            submission.Submission.Payload,
+            submission.Submission.ExtraPoints.AsDto(),
+            Points: submission.TotalPoints.AsDto(),
+            submission.Submission.GroupAssignment.Assignment.ShortName,
+            submission.Submission.State.Kind.AsDto());
     }
 }

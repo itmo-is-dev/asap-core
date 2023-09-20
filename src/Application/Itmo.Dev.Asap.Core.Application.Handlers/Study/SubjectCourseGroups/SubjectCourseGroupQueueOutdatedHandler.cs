@@ -3,7 +3,8 @@ using Itmo.Dev.Asap.Core.Application.Contracts.Study.Queues.Notifications;
 using Itmo.Dev.Asap.Core.Application.Dto.Tables;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using static Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Notifications.SubjectCourseGroupQueueOutdated;
+using static Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Notifications.
+    SubjectCourseGroupQueueOutdated;
 
 namespace Itmo.Dev.Asap.Core.Application.Handlers.Study.SubjectCourseGroups;
 
@@ -50,6 +51,11 @@ internal class SubjectCourseGroupQueueOutdatedHandler : INotificationHandler<Not
             notification.SubjectCourseId,
             notification.GroupId,
             submissionsQueue);
+
+        _logger.LogInformation(
+            "Publishing queue updated notification subject course = {SubjectCourseId}, student group = {StudentGroupId}",
+            notification.SubjectCourseId,
+            notification.GroupId);
 
         await _publisher.Publish(updatedNotification, cancellationToken);
     }

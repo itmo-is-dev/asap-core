@@ -63,7 +63,7 @@ internal class UpdateSubmissionPointsHandler : IRequestHandler<Command, Response
             ratedSubmission,
             assignment);
 
-        var notification = new SubmissionPointsUpdated.Notification(submission.ToDto(ratedSubmission.TotalPoints));
+        var notification = new SubmissionPointsUpdated.Notification(ratedSubmission.ToDto());
         await _publisher.PublishAsync(notification, cancellationToken);
 
         return new Response(submissionRateDto);

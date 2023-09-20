@@ -62,9 +62,7 @@ public class QueueService : IQueueService
             .Select(x => x.s.CalculateRatedSubmission(x.a, subjectCourse.DeadlinePolicy))
             .ToArray();
 
-        SubmissionDto[] submissionDto = ratedSubmissions
-            .Select(x => x.Submission.ToDto(x.TotalPoints))
-            .ToArray();
+        SubmissionDto[] submissionDto = ratedSubmissions.Select(x => x.ToDto()).ToArray();
 
         StudentDto[] students = ratedSubmissions
             .Select(x => x.Submission.Student)
