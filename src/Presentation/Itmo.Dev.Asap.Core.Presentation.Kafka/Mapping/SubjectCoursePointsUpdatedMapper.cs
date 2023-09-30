@@ -23,7 +23,7 @@ internal static partial class SubjectCoursePointsUpdatedMapper
             Points = new SubjectCoursePointsUpdatedValue.Types.SubjectCoursePoints
             {
                 Assignments = { notification.Points.Assignments.Select(x => x.ToProto()) },
-                Students = { notification.Points.StudentsPoints.Select(x => x.Student.ToProto()) },
+                Students = { notification.Points.StudentsPoints.Select(x => x.ToStudentProto()) },
                 Points = { notification.Points.StudentsPoints.Select(x => x.ToProto()) },
             },
         };
@@ -31,7 +31,20 @@ internal static partial class SubjectCoursePointsUpdatedMapper
 
     private static partial SubjectCoursePointsUpdatedValue.Types.Assignment ToProto(this AssignmentDto assignment);
 
-    private static partial SubjectCoursePointsUpdatedValue.Types.Student ToProto(this StudentDto student);
+    private static partial SubjectCoursePointsUpdatedValue.Types.User ToProto(this UserDto user);
+
+    private static partial SubjectCoursePointsUpdatedValue.Types.AssignmentPoints MapToAssignmentPoints(
+        AssignmentPointsDto source);
+
+    private static SubjectCoursePointsUpdatedValue.Types.Student ToStudentProto(this StudentPointsDto points)
+    {
+        return new SubjectCoursePointsUpdatedValue.Types.Student
+        {
+            User = points.Student.User.ToProto(),
+            GroupName = points.Student.GroupName,
+            SubjectCourseOrdinal = points.SubjectCourseOrdinal,
+        };
+    }
 
     private static SubjectCoursePointsUpdatedValue.Types.StudentPoints ToProto(this StudentPointsDto pointsDto)
     {
@@ -41,9 +54,6 @@ internal static partial class SubjectCoursePointsUpdatedMapper
             Points = { pointsDto.Points.Select(MapToAssignmentPoints) },
         };
     }
-
-    private static partial SubjectCoursePointsUpdatedValue.Types.AssignmentPoints MapToAssignmentPoints(
-        AssignmentPointsDto source);
 
     private static Timestamp ToTimestamp(DateOnly dateOnly)
     {

@@ -21,7 +21,7 @@ public partial class Student : IEntity
 
     public StudentGroupInfo? Group { get; private set; }
 
-    public void DismissFromStudyGroup(Groups.StudentGroup group)
+    public void DismissFromStudyGroup(StudentGroup group)
     {
         if (Group is null)
             throw new DomainInvalidOperationException("Student is not in any group");
@@ -33,7 +33,7 @@ public partial class Student : IEntity
         Group = null;
     }
 
-    public (Student Student, IStudentEvent Event) TransferToAnotherGroup(Groups.StudentGroup? from, Groups.StudentGroup to)
+    public (Student Student, IStudentEvent Event) TransferToAnotherGroup(StudentGroup? from, StudentGroup to)
     {
         if (Nullable.Equals(Group?.Id, from?.Id) is false)
             throw new DomainInvalidOperationException("Trying to transfer student from invalid group");

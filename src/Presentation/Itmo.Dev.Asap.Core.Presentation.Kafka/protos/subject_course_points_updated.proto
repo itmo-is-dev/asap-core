@@ -36,6 +36,7 @@ message SubjectCoursePointsUpdatedValue {
   message Student {
     User user = 1;
     string group_name = 2;
+    int32 subject_course_ordinal = 3;
   }
 
   message AssignmentPoints {

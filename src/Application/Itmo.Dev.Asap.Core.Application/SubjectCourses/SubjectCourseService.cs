@@ -35,11 +35,12 @@ public class SubjectCourseService : ISubjectCourseService
             .OrderBy(x => x.Assignment.Order)
             .ToArrayAsync(cancellationToken);
 
-        StudentPointsDto[] studentPoints = studentAssignments
+        StudentPointsDto[] studentPointsDto = studentAssignments
             .GroupBy(x => x.Student)
             .Select(MapToStudentPoints)
             .OrderBy(x => x.Student.GroupName)
             .ThenBy(x => _userFullNameFormatter.GetFullName(x.Student.User))
+            .Select((tuple, i) => new StudentPointsDto(tuple.Student, i, tuple.Points))
             .ToArray();
 
         AssignmentDto[] assignments = await _context.Assignments
@@ -47,10 +48,11 @@ public class SubjectCourseService : ISubjectCourseService
             .Select(x => x.ToDto())
             .ToArrayAsync(cancellationToken);
 
-        return new SubjectCoursePointsDto(assignments, studentPoints);
+        return new SubjectCoursePointsDto(assignments, studentPointsDto);
     }
 
-    private StudentPointsDto MapToStudentPoints(IGrouping<Student, StudentAssignment> grouping)
+    private (StudentDto Student, AssignmentPointsDto[] Points) MapToStudentPoints(
+        IGrouping<Student, StudentAssignment> grouping)
     {
         StudentDto studentDto = grouping.Key.ToDto();
 
@@ -60,6 +62,6 @@ public class SubjectCourseService : ISubjectCourseService
             .Select(x => new AssignmentPointsDto(x.Assignment.Id, x.SubmissionDate, x.IsBanned, x.Points.Value))
             .ToArray();
 
-        return new StudentPointsDto(studentDto, pointsDto);
+        return (studentDto, pointsDto);
     }
 }
