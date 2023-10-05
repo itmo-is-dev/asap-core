@@ -29,6 +29,10 @@ public static class SubjectCourseMapper
 
     public static SubjectCourseModel MapFrom(SubjectCourse entity)
     {
-        return new SubjectCourseModel(entity.Id, entity.SubjectId, entity.Title, entity.WorkflowType);
+        var penalties = entity.DeadlinePolicy.DeadlinePenalties
+            .Select(x => DeadlinePenaltyMapper.MapFrom(x, Guid.NewGuid(), entity.Id))
+            .ToList();
+
+        return new SubjectCourseModel(entity.Id, entity.SubjectId, entity.Title, entity.WorkflowType, penalties);
     }
 }
