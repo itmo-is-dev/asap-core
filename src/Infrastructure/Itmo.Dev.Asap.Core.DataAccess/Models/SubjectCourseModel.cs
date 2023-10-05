@@ -11,11 +11,13 @@ public partial class SubjectCourseModel : IEntity<Guid>
         Guid id,
         Guid subjectId,
         string title,
-        SubmissionStateWorkflowType? workflowType) : this(id)
+        SubmissionStateWorkflowType? workflowType,
+        ICollection<DeadlinePenaltyModel> deadlinePenalties) : this(id)
     {
         SubjectId = subjectId;
         Title = title;
         WorkflowType = workflowType;
+        DeadlinePenalties = deadlinePenalties;
     }
 
     public Guid SubjectId { get; set; }

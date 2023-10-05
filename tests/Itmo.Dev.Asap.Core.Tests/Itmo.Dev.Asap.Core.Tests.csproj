@@ -38,4 +38,5 @@
       <ProjectReference Include="..\..\src\Infrastructure\Itmo.Dev.Asap.Core.Seeding\Itmo.Dev.Asap.Core.Seeding.csproj" />
     </ItemGroup>
 
+
 </Project>

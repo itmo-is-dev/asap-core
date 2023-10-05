@@ -48,10 +48,14 @@ public class SubjectCourseGenerator : EntityGeneratorBase<SubjectCourseModel>
 
         const SubmissionStateWorkflowType reviewType = SubmissionStateWorkflowType.ReviewWithDefense;
 
-        var subjectCourse = new SubjectCourseModel(_faker.Random.Guid(), subject.Id, subjectCourseName, reviewType)
+        var subjectCourse = new SubjectCourseModel(
+            _faker.Random.Guid(),
+            subject.Id,
+            subjectCourseName,
+            reviewType,
+            new List<DeadlinePenaltyModel>())
         {
             Assignments = new List<AssignmentModel>(),
-            DeadlinePenalties = new List<DeadlinePenaltyModel>(),
             Mentors = new List<MentorModel>(),
             SubjectCourseGroups = new List<SubjectCourseGroupModel>(),
         };
