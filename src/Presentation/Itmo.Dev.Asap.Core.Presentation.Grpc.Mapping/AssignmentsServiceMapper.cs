@@ -31,6 +31,9 @@ internal static partial class AssignmentsServiceMapper
     public static partial UpdateGroupAssignmentDeadline.Command MapTo(
         this UpdateGroupAssignmentRequest request);
 
+    public static partial UpdateGroupAssignmentDeadlines.Command MapTo(
+        this UpdateGroupAssignmentDeadlinesRequest request);
+
     public static partial CreateResponse MapFrom(this CreateAssignment.Response response);
 
     public static partial GetByIdResponse MapFrom(this GetAssignmentById.Response response);
@@ -41,4 +44,7 @@ internal static partial class AssignmentsServiceMapper
 
     public static partial UpdateGroupAssignmentResponse MapFrom(
         this UpdateGroupAssignmentDeadline.Response response);
+
+    public static partial UpdateGroupAssignmentDeadlinesResponse MapFrom(
+        this UpdateGroupAssignmentDeadlines.Response response);
 }
