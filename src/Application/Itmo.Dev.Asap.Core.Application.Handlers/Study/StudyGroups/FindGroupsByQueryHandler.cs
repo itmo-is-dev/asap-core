@@ -29,6 +29,7 @@ internal class FindGroupsByQueryHandler : IRequestHandler<Query, Response>
         StudentGroupDto[] dto = await _context.StudentGroups
             .QueryAsync(query, cancellationToken)
             .Select(x => x.ToDto())
+            .OrderBy(x => x.Name)
             .ToArrayAsync(cancellationToken);
 
         return new Response(dto);
