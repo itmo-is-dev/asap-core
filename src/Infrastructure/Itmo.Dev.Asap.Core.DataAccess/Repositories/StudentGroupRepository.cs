@@ -47,6 +47,13 @@ public class StudentGroupRepository : IStudentGroupRepository
                 EF.Functions.ILike(x.Name, p)));
         }
 
+        if (query.SubjectCourseIds is not [])
+        {
+            queryable = queryable.Where(
+                group => group.SubjectCourseGroups.Any(
+                    sc => query.SubjectCourseIds.Contains(sc.SubjectCourseId)));
+        }
+
         if (query.ExcludedSubjectCourseIds is not [])
         {
             queryable = queryable.Where(

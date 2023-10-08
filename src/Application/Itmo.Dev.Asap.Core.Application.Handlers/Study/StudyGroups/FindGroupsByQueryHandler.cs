@@ -21,6 +21,7 @@ internal class FindGroupsByQueryHandler : IRequestHandler<Query, Response>
         var query = StudentGroupQuery.Build(x => x
             .WithExcludedIds(request.ExcludedIds)
             .WithNamePatterns(request.NamePatterns)
+            .WithSubjectCourseIds(request.SubjectCourseIds)
             .WithExcludedSubjectCourseIds(request.ExcludedSubjectCourseIds)
             .WithCursor(request.PageToken?.Id)
             .WithLimit(request.PageSize));

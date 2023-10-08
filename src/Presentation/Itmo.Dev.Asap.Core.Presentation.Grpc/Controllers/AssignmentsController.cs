@@ -73,4 +73,14 @@ public class AssignmentsController : AssignmentsService.AssignmentsServiceBase
 
         return response.MapFrom();
     }
+
+    public override async Task<UpdateGroupAssignmentDeadlinesResponse> UpdateGroupAssignmentDeadlines(
+        UpdateGroupAssignmentDeadlinesRequest request,
+        ServerCallContext context)
+    {
+        UpdateGroupAssignmentDeadlines.Command command = request.MapTo();
+        UpdateGroupAssignmentDeadlines.Response response = await _mediator.Send(command, context.CancellationToken);
+
+        return response.MapFrom();
+    }
 }
