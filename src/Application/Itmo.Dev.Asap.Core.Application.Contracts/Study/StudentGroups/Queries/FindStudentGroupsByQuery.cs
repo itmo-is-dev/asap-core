@@ -10,9 +10,10 @@ internal static class FindStudentGroupsByQuery
     public record Query(
         PageToken? PageToken,
         int PageSize,
-        Guid[] ExcludedIds,
-        string[] NamePatterns,
-        Guid[] ExcludedSubjectCourseIds) : IRequest<Response>;
+        IEnumerable<Guid> ExcludedIds,
+        IEnumerable<string> NamePatterns,
+        IEnumerable<Guid> SubjectCourseIds,
+        IEnumerable<Guid> ExcludedSubjectCourseIds) : IRequest<Response>;
 
     public record Response(IReadOnlyCollection<StudentGroupDto> Groups);
 }

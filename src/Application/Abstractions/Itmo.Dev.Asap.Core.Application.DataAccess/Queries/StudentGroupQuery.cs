@@ -8,6 +8,7 @@ public partial record StudentGroupQuery(
     Guid[] ExcludedIds,
     Guid[] StudentIds,
     string[] NamePatterns,
+    Guid[] SubjectCourseIds,
     Guid[] ExcludedSubjectCourseIds,
     Guid? Cursor,
     int? Limit);
