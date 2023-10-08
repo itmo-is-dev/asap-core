@@ -51,7 +51,7 @@ public class StudentGroupRepository : IStudentGroupRepository
         {
             queryable = queryable.Where(
                 group => group.SubjectCourseGroups.Any(
-                    sc => query.ExcludedSubjectCourseIds.Contains(sc.SubjectCourseId)));
+                    sc => query.SubjectCourseIds.Contains(sc.SubjectCourseId)));
         }
 
         if (query.ExcludedSubjectCourseIds is not [])
