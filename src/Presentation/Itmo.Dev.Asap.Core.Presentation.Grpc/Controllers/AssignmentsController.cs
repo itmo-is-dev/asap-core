@@ -68,10 +68,27 @@ public class AssignmentsController : AssignmentsService.AssignmentsServiceBase
         UpdateGroupAssignmentRequest request,
         ServerCallContext context)
     {
-        UpdateGroupAssignmentDeadline.Command command = request.MapTo();
-        UpdateGroupAssignmentDeadline.Response response = await _mediator.Send(command, context.CancellationToken);
+        var command = new UpdateGroupAssignmentDeadlines.Command(
+            request.AssignmentId.ToGuid(),
+            request.Deadline.MapToDateOnly(),
+            new[] { request.GroupId.ToGuid() });
 
-        return response.MapFrom();
+        UpdateGroupAssignmentDeadlines.Response response = await _mediator.Send(command, context.CancellationToken);
+
+        return response switch
+        {
+            UpdateGroupAssignmentDeadlines.Response.Success success => new UpdateGroupAssignmentResponse
+            {
+                GroupAssignment = success.GroupAssignments.Single().MapToProto(),
+            },
+
+            Application.Contracts.Study.GroupAssignments.Commands.UpdateGroupAssignmentDeadlines.Response.Unauthorized
+                => throw new RpcException(new Status(
+                    StatusCode.PermissionDenied,
+                    "User is unauthorized to update this subject course deadlines")),
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation finished with unexpected result")),
+        };
     }
 
     public override async Task<UpdateGroupAssignmentDeadlinesResponse> UpdateGroupAssignmentDeadlines(
@@ -81,6 +98,16 @@ public class AssignmentsController : AssignmentsService.AssignmentsServiceBase
         UpdateGroupAssignmentDeadlines.Command command = request.MapTo();
         UpdateGroupAssignmentDeadlines.Response response = await _mediator.Send(command, context.CancellationToken);
 
-        return response.MapFrom();
+        return response switch
+        {
+            UpdateGroupAssignmentDeadlines.Response.Success success => success.MapFrom(),
+
+            Application.Contracts.Study.GroupAssignments.Commands.UpdateGroupAssignmentDeadlines.Response.Unauthorized
+                => throw new RpcException(new Status(
+                    StatusCode.PermissionDenied,
+                    "User is unauthorized to update this subject course deadlines")),
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation finished with unexpected result")),
+        };
     }
 }

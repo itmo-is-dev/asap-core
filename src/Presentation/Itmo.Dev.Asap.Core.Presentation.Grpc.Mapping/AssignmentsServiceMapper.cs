@@ -3,7 +3,9 @@ using Itmo.Dev.Asap.Core.Application.Contracts.Study.Assignments.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Assignments.Queries;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.GroupAssignments.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.GroupAssignments.Queries;
+using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Assignments;
+using Itmo.Dev.Asap.Core.Models;
 using Riok.Mapperly.Abstractions;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
@@ -28,9 +30,6 @@ internal static partial class AssignmentsServiceMapper
 
     public static partial GetGroupAssignments.Query MapTo(this GetGroupAssignmentsRequest request);
 
-    public static partial UpdateGroupAssignmentDeadline.Command MapTo(
-        this UpdateGroupAssignmentRequest request);
-
     public static partial UpdateGroupAssignmentDeadlines.Command MapTo(
         this UpdateGroupAssignmentDeadlinesRequest request);
 
@@ -42,9 +41,8 @@ internal static partial class AssignmentsServiceMapper
 
     public static partial GetGroupAssignmentsResponse MapFrom(this GetGroupAssignments.Response response);
 
-    public static partial UpdateGroupAssignmentResponse MapFrom(
-        this UpdateGroupAssignmentDeadline.Response response);
-
     public static partial UpdateGroupAssignmentDeadlinesResponse MapFrom(
-        this UpdateGroupAssignmentDeadlines.Response response);
+        this UpdateGroupAssignmentDeadlines.Response.Success response);
+
+    public static partial GroupAssignment MapToProto(this GroupAssignmentDto groupAssignment);
 }
