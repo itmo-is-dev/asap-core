@@ -7,5 +7,12 @@ internal static class UpdateGroupAssignmentDeadlines
 {
     public record Command(Guid AssignmentId, DateOnly Deadline, IEnumerable<Guid> GroupIds) : IRequest<Response>;
 
-    public record Response(IEnumerable<GroupAssignmentDto> GroupAssignments);
+    public abstract record Response
+    {
+        private Response() { }
+
+        public sealed record Success(IEnumerable<GroupAssignmentDto> GroupAssignments) : Response;
+
+        public sealed record Unauthorized : Response;
+    }
 }

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Itmo.Dev.Asap.Core.Application.Abstractions.Identity;
-using Itmo.Dev.Asap.Core.Application.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.GroupAssignments.Commands;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
 using Itmo.Dev.Asap.Core.Application.Handlers.Study.GroupAssignments;
@@ -39,10 +38,14 @@ public class UpdateGroupAssignmentDeadlineTest :
         var currentUser = new MentorUser(mentor.UserId);
 
         // Act
-        UpdateGroupAssignmentDeadline.Response response = await HandleByCurrentUser(currentUser);
+        UpdateGroupAssignmentDeadlines.Response response = await HandleByCurrentUser(currentUser);
 
         // Assert
-        response.GroupAssignment.Deadline.Should().Be(_newDeadline);
+        response.Should()
+            .BeOfType<UpdateGroupAssignmentDeadlines.Response.Success>()
+            .Which.GroupAssignments.Single()
+            .Deadline.Should()
+            .Be(_newDeadline);
     }
 
     [Fact]
@@ -68,10 +71,10 @@ public class UpdateGroupAssignmentDeadlineTest :
         var currentUser = new MentorUser(mentor.UserId);
 
         // Act
-        Func<Task<UpdateGroupAssignmentDeadline.Response>> action = () => HandleByCurrentUser(currentUser);
+        UpdateGroupAssignmentDeadlines.Response response = await HandleByCurrentUser(currentUser);
 
         // Assert
-        await Assert.ThrowsAsync<AccessDeniedException>(action);
+        response.Should().BeOfType<UpdateGroupAssignmentDeadlines.Response.Unauthorized>();
     }
 
     [Fact]
@@ -81,10 +84,14 @@ public class UpdateGroupAssignmentDeadlineTest :
         var currentUser = new ModeratorUser(Guid.NewGuid());
 
         // Act
-        UpdateGroupAssignmentDeadline.Response response = await HandleByCurrentUser(currentUser);
+        UpdateGroupAssignmentDeadlines.Response response = await HandleByCurrentUser(currentUser);
 
         // Assert
-        response.GroupAssignment.Deadline.Should().Be(_newDeadline);
+        response.Should()
+            .BeOfType<UpdateGroupAssignmentDeadlines.Response.Success>()
+            .Which.GroupAssignments.Single()
+            .Deadline.Should()
+            .Be(_newDeadline);
     }
 
     [Fact]
@@ -94,10 +101,14 @@ public class UpdateGroupAssignmentDeadlineTest :
         var currentUser = new AdminUser(Guid.NewGuid());
 
         // Act
-        UpdateGroupAssignmentDeadline.Response response = await HandleByCurrentUser(currentUser);
+        UpdateGroupAssignmentDeadlines.Response response = await HandleByCurrentUser(currentUser);
 
         // Assert
-        response.GroupAssignment.Deadline.Should().Be(_newDeadline);
+        response.Should()
+            .BeOfType<UpdateGroupAssignmentDeadlines.Response.Success>()
+            .Which.GroupAssignments.Single()
+            .Deadline.Should()
+            .Be(_newDeadline);
     }
 
     private Task<GroupAssignmentModel> GetGroupAssignment()
@@ -105,15 +116,15 @@ public class UpdateGroupAssignmentDeadlineTest :
         return Context.GroupAssignments.FirstAsync();
     }
 
-    private async Task<UpdateGroupAssignmentDeadline.Response> HandleByCurrentUser(ICurrentUser currentUser)
+    private async Task<UpdateGroupAssignmentDeadlines.Response> HandleByCurrentUser(ICurrentUser currentUser)
     {
         GroupAssignmentModel groupAssignment = await GetGroupAssignment();
-        var handler = new UpdateGroupAssignmentDeadlineHandler(PersistenceContext, _publisher, currentUser);
+        var handler = new UpdateGroupAssignmentDeadlinesHandler(PersistenceContext, currentUser, _publisher);
 
-        var command = new UpdateGroupAssignmentDeadline.Command(
-            groupAssignment.StudentGroupId,
+        var command = new UpdateGroupAssignmentDeadlines.Command(
             groupAssignment.AssignmentId,
-            _newDeadline);
+            _newDeadline,
+            new[] { groupAssignment.StudentGroupId });
 
         return await handler.Handle(command, default);
     }
