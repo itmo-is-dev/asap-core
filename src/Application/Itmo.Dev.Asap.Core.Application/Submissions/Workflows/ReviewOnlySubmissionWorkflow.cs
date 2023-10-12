@@ -1,13 +1,15 @@
 using Itmo.Dev.Asap.Core.Application.Abstractions.Permissions;
+using Itmo.Dev.Asap.Core.Application.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
+using Itmo.Dev.Asap.Core.Application.Dto.Submissions.Workflow;
 using Itmo.Dev.Asap.Core.Application.Factories;
 using Itmo.Dev.Asap.Core.Application.Specifications;
-using Itmo.Dev.Asap.Core.Common.Resources;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
 using Itmo.Dev.Asap.Core.Domain.Study.SubjectCourses;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
+using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;
 
 namespace Itmo.Dev.Asap.Core.Application.Submissions.Workflows;
@@ -19,21 +21,27 @@ public class ReviewOnlySubmissionWorkflow : SubmissionWorkflowBase
         IPermissionValidator permissionValidator,
         IPublisher publisher) : base(permissionValidator, context, publisher) { }
 
-    public override async Task<SubmissionActionMessageDto> SubmissionApprovedAsync(
+    public override async Task<SubmissionApprovedResult> SubmissionApprovedAsync(
         Guid issuerId,
         Guid submissionId,
         CancellationToken cancellationToken)
     {
         await PermissionValidator.EnsureSubmissionMentorAsync(issuerId, submissionId, cancellationToken);
 
-        Submission submission = await ExecuteSubmissionCommandAsync(
+        ExecuteSubmissionCommandResult result = await ExecuteSubmissionCommandAsync(
             submissionId,
             cancellationToken,
-            static x =>
-            {
-                if (x.Rating is null)
-                    x.Rate(Fraction.FromDenormalizedValue(100), 0);
-            });
+            static x => x.Rating is null
+                ? new SubmissionStateMoveResult.Success(x.State)
+                : x.Rate(Fraction.FromDenormalizedValue(100), 0));
+
+        if (result is ExecuteSubmissionCommandResult.InvalidMove invalidMove)
+            return new SubmissionApprovedResult.InvalidState(invalidMove.Submission.State.Kind.AsDto());
+
+        if (result is not ExecuteSubmissionCommandResult.Success success)
+            throw new UnexpectedOperationResultException();
+
+        Submission submission = success.Submission;
 
         SubjectCourse subjectCourse = await Context.SubjectCourses
             .GetByAssignmentId(submission.GroupAssignment.Id.AssignmentId, cancellationToken);
@@ -47,8 +55,6 @@ public class ReviewOnlySubmissionWorkflow : SubmissionWorkflowBase
             ratedSubmission,
             assignment);
 
-        string message = UserCommandProcessingMessage.ReviewRatedSubmission(submissionRateDto.TotalPoints ?? 0);
-
-        return new SubmissionActionMessageDto(message);
+        return new SubmissionApprovedResult.Success(submissionRateDto);
     }
 }

@@ -1,4 +1,3 @@
-using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
@@ -11,54 +10,32 @@ public class InactiveSubmissionState : ISubmissionState
 
     public bool IsTerminalEffectiveState => false;
 
-    public ISubmissionState MoveToRated(Fraction? rating, Points? extraPoints)
+    public SubmissionStateMoveResult MoveToRated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
+
+    public SubmissionStateMoveResult MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
     {
-        const string message = "Submission is inactive and cannot be rated";
-        throw new DomainInvalidOperationException(message);
+        return new SubmissionStateMoveResult.InvalidMove();
     }
 
-    public ISubmissionState MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
-    {
-        const string message = "Cannot update points of inactive submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToBanned()
+        => new SubmissionStateMoveResult.Success(new BannedSubmissionState());
 
-    public ISubmissionState MoveToBanned()
-    {
-        return new BannedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToActivated()
+        => new SubmissionStateMoveResult.Success(new ActiveSubmissionState());
 
-    public ISubmissionState MoveToActivated()
-    {
-        return new ActiveSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToDeactivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDeactivated()
-    {
-        const string message = "Submission is already inactive";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDateUpdated(SpbDateTime newDate)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDateUpdated(SpbDateTime newDate)
-    {
-        const string message = "Cannot update date of inactive submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDeleted()
+        => new SubmissionStateMoveResult.Success(new DeletedSubmissionState());
 
-    public ISubmissionState MoveToDeleted()
-    {
-        return new DeletedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToCompleted()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToCompleted()
-    {
-        const string message = "Cannot complete inactive submission";
-        throw new DomainInvalidOperationException(message);
-    }
-
-    public ISubmissionState MoveToReviewed()
-    {
-        const string message = "Cannot review inactive submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToReviewed()
+        => new SubmissionStateMoveResult.InvalidMove();
 }
