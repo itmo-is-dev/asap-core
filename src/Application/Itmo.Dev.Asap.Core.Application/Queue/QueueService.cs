@@ -1,9 +1,9 @@
 using Itmo.Dev.Asap.Core.Application.Abstractions.Queue;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Dto.Tables;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Groups;
 using Itmo.Dev.Asap.Core.Domain.Queue;

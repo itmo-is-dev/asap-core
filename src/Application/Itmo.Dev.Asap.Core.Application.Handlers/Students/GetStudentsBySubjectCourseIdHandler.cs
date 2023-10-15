@@ -1,5 +1,5 @@
 using Itmo.Dev.Asap.Core.Application.DataAccess;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Mapping;
 using MediatR;

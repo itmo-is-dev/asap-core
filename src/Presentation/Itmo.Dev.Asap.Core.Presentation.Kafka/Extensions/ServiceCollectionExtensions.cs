@@ -11,10 +11,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection collection,
         IConfiguration configuration)
     {
-        const string assignmentCreatedKey = "Presentation:Kafka:Producers:AssignmentCreated";
-        const string queueUpdatedKey = "Presentation:Kafka:Producers:QueueUpdated";
-        const string subjectCourseCreatedKey = "Presentation:Kafka:Producers:SubjectCourseCreated";
-        const string subjectCoursePointsUpdatedKey = "Presentation:Kafka:Producers:SubjectCoursePointsUpdated";
+        const string configurationKey = "Presentation:Kafka:Producers";
 
         string host = configuration.GetSection("Presentation:Kafka:Host").Get<string>() ?? string.Empty;
 
@@ -25,7 +22,7 @@ public static class ServiceCollectionExtensions
             .SerializeValueWithProto()
             .UseNamedOptionsConfiguration(
                 "AssignmentCreated",
-                configuration.GetSection(assignmentCreatedKey),
+                configuration.GetSection($"{configurationKey}:AssignmentCreated"),
                 c => c.WithHost(host)));
 
         collection.AddKafkaProducer<QueueUpdatedKey, QueueUpdatedValue>(selector => selector
@@ -33,7 +30,7 @@ public static class ServiceCollectionExtensions
             .SerializeValueWithProto()
             .UseNamedOptionsConfiguration(
                 "QueueUpdated",
-                configuration.GetSection(queueUpdatedKey),
+                configuration.GetSection($"{configurationKey}:QueueUpdated"),
                 c => c.WithHost(host)));
 
         collection.AddKafkaProducer<SubjectCourseCreatedKey, SubjectCourseCreatedValue>(selector => selector
@@ -41,7 +38,7 @@ public static class ServiceCollectionExtensions
             .SerializeValueWithProto()
             .UseNamedOptionsConfiguration(
                 "SubjectCourseCreated",
-                configuration.GetSection(subjectCourseCreatedKey),
+                configuration.GetSection($"{configurationKey}:SubjectCourseCreated"),
                 c => c.WithHost(host)));
 
         collection.AddKafkaProducer<SubjectCoursePointsUpdatedKey, SubjectCoursePointsUpdatedValue>(selector => selector
@@ -49,7 +46,15 @@ public static class ServiceCollectionExtensions
             .SerializeValueWithProto()
             .UseNamedOptionsConfiguration(
                 "SubjectCoursePointsUpdated",
-                configuration.GetSection(subjectCoursePointsUpdatedKey),
+                configuration.GetSection($"{configurationKey}:SubjectCoursePointsUpdated"),
+                c => c.WithHost(host)));
+
+        collection.AddKafkaProducer<StudentPointsUpdatedKey, StudentPointsUpdatedValue>(selector => selector
+            .SerializeKeyWithProto()
+            .SerializeValueWithProto()
+            .UseNamedOptionsConfiguration(
+                "StudentPointsUpdated",
+                configuration.GetSection($"{configurationKey}:StudentPointsUpdated"),
                 c => c.WithHost(host)));
 
         return collection;

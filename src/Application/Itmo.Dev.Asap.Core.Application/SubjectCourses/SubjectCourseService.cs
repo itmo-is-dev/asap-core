@@ -1,10 +1,10 @@
 using Itmo.Dev.Asap.Core.Application.Abstractions.Formatters;
 using Itmo.Dev.Asap.Core.Application.Abstractions.SubjectCourses;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Dto.SubjectCourses;
 using Itmo.Dev.Asap.Core.Application.Dto.Tables;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Application.Extensions;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Students;

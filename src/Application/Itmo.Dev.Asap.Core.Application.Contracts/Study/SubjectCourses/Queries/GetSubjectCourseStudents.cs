@@ -1,4 +1,4 @@
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using MediatR;
 
 namespace Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Queries;
