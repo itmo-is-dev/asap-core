@@ -1,4 +1,4 @@
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 
 namespace Itmo.Dev.Asap.Core.Application.Dto.Tables;
 

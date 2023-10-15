@@ -1,6 +1,6 @@
 using Itmo.Dev.Asap.Core.Application.Contracts.Students.Notifications;
 using Itmo.Dev.Asap.Core.Application.DataAccess;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Specifications;
 using Itmo.Dev.Asap.Core.Domain.Groups;
 using Itmo.Dev.Asap.Core.Domain.Students;
