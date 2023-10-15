@@ -1,41 +1,41 @@
-using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
+using Itmo.Dev.Asap.Core.Application.Dto.Submissions.Workflow;
 
 namespace Itmo.Dev.Asap.Core.Application.Abstractions.Submissions;
 
 public interface ISubmissionWorkflow
 {
-    Task<SubmissionActionMessageDto> SubmissionApprovedAsync(
+    Task<SubmissionApprovedResult> SubmissionApprovedAsync(
         Guid issuerId,
         Guid submissionId,
         CancellationToken cancellationToken);
 
-    Task<SubmissionActionMessageDto> SubmissionNotAcceptedAsync(
+    Task<SubmissionNotAcceptedResult> SubmissionNotAcceptedAsync(
         Guid issuerId,
         Guid submissionId,
         CancellationToken cancellationToken);
 
-    Task<SubmissionActionMessageDto> SubmissionReactivatedAsync(
+    Task<SubmissionReactivatedResult> SubmissionReactivatedAsync(
         Guid issuerId,
         Guid submissionId,
         CancellationToken cancellationToken);
 
-    Task<SubmissionActionMessageDto> SubmissionAcceptedAsync(
+    Task<SubmissionAcceptedResult> SubmissionAcceptedAsync(
         Guid issuerId,
         Guid submissionId,
         CancellationToken cancellationToken);
 
-    Task<SubmissionActionMessageDto> SubmissionRejectedAsync(
+    Task<SubmissionRejectedResult> SubmissionRejectedAsync(
         Guid issuerId,
         Guid submissionId,
         CancellationToken cancellationToken);
 
-    Task<SubmissionActionMessageDto> SubmissionAbandonedAsync(
+    Task<SubmissionAbandonedResult> SubmissionAbandonedAsync(
         Guid issuerId,
         Guid submissionId,
         bool isTerminal,
         CancellationToken cancellationToken);
 
-    Task<SubmissionUpdateResult> SubmissionUpdatedAsync(
+    Task<SubmissionUpdatedResult> SubmissionUpdatedAsync(
         Guid issuerId,
         Guid userId,
         Guid assignmentId,

@@ -1,4 +1,3 @@
-using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
@@ -11,52 +10,30 @@ public class CompletedSubmissionState : ISubmissionState
 
     public bool IsTerminalEffectiveState => true;
 
-    public ISubmissionState MoveToRated(Fraction? rating, Points? extraPoints)
-    {
-        const string message = "Submission is already completed and cannot be rated again";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToRated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
-    {
-        return this;
-    }
+    public SubmissionStateMoveResult MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.Success(this);
 
-    public ISubmissionState MoveToBanned()
-    {
-        return new BannedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToBanned()
+        => new SubmissionStateMoveResult.Success(new BannedSubmissionState());
 
-    public ISubmissionState MoveToActivated()
-    {
-        return new ActiveSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToActivated()
+        => new SubmissionStateMoveResult.Success(new ActiveSubmissionState());
 
-    public ISubmissionState MoveToDeactivated()
-    {
-        const string message = "Submission is already completed and cannot be deactivated";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDeactivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDateUpdated(SpbDateTime newDate)
-    {
-        return this;
-    }
+    public SubmissionStateMoveResult MoveToDateUpdated(SpbDateTime newDate)
+        => new SubmissionStateMoveResult.Success(this);
 
-    public ISubmissionState MoveToDeleted()
-    {
-        return new DeletedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToDeleted()
+        => new SubmissionStateMoveResult.Success(new DeletedSubmissionState());
 
-    public ISubmissionState MoveToCompleted()
-    {
-        const string message = "Submission is already completed and cannot be completed again";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToCompleted()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToReviewed()
-    {
-        const string message = "Submission is already completed and cannot be reviewed again";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToReviewed()
+        => new SubmissionStateMoveResult.InvalidMove();
 }
