@@ -1,6 +1,8 @@
 syntax = "proto3";
 option csharp_namespace = "Itmo.Dev.Asap.Kafka";
 
+package itmo.dev.asap.kafka;
+
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 
