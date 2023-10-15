@@ -32,8 +32,8 @@ public class ReviewOnlySubmissionWorkflow : SubmissionWorkflowBase
             submissionId,
             cancellationToken,
             static x => x.Rating is null
-                ? new SubmissionStateMoveResult.Success(x.State)
-                : x.Rate(Fraction.FromDenormalizedValue(100), 0));
+                ? x.Rate(Fraction.FromDenormalizedValue(100), 0)
+                : new SubmissionStateMoveResult.Success(x.State));
 
         if (result is ExecuteSubmissionCommandResult.InvalidMove invalidMove)
             return new SubmissionApprovedResult.InvalidState(invalidMove.Submission.State.Kind.AsDto());
