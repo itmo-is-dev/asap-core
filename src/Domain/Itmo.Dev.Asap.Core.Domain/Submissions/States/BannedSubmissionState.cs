@@ -1,4 +1,3 @@
-using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
@@ -11,57 +10,30 @@ public class BannedSubmissionState : ISubmissionState
 
     public bool IsTerminalEffectiveState => true;
 
-    public ISubmissionState MoveToRated(Fraction? rating, Points? extraPoints)
-    {
-        string message = $"Submission {this} is banned and cannot be rated";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToRated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
-    {
-        const string message = "Cannot update points of banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToBanned()
-    {
-        string message = $"Submission {this} is already banned";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToBanned()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToActivated()
-    {
-        const string message = "Cannot activate banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToActivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDeactivated()
-    {
-        const string message = "Cannot deactivate banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDeactivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDateUpdated(SpbDateTime newDate)
-    {
-        const string message = "Cannot update date of banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDateUpdated(SpbDateTime newDate)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDeleted()
-    {
-        const string message = "Cannot delete banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDeleted()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToCompleted()
-    {
-        const string message = "Cannot complete banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToCompleted()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToReviewed()
-    {
-        const string message = "Cannot review banned submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToReviewed()
+        => new SubmissionStateMoveResult.InvalidMove();
 }

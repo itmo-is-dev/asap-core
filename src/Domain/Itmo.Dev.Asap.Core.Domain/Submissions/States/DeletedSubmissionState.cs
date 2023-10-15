@@ -1,4 +1,3 @@
-using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
@@ -11,56 +10,30 @@ public class DeletedSubmissionState : ISubmissionState
 
     public bool IsTerminalEffectiveState => false;
 
-    public ISubmissionState MoveToRated(Fraction? rating, Points? extraPoints)
-    {
-        string message = "Cannot update submission points. Submission state: is deleted";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToRated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
-    {
-        string message = "Cannot update submission points of deleted submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToBanned()
-    {
-        return new BannedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToBanned()
+        => new SubmissionStateMoveResult.Success(new BannedSubmissionState());
 
-    public ISubmissionState MoveToActivated()
-    {
-        const string message = "Cannot activate deleted submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToActivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDeactivated()
-    {
-        const string message = "Cannot deactivate deleted submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDeactivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDateUpdated(SpbDateTime newDate)
-    {
-        const string message = "Cannot update submission date of deleted submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDateUpdated(SpbDateTime newDate)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDeleted()
-    {
-        const string message = "Submission is already deleted";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToDeleted()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToCompleted()
-    {
-        const string message = "Cannot complete deleted submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToCompleted()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToReviewed()
-    {
-        const string message = "Cannot review deleted submission";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToReviewed()
+        => new SubmissionStateMoveResult.InvalidMove();
 }

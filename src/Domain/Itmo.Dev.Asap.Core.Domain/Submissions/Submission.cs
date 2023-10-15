@@ -80,7 +80,7 @@ public partial class Submission : IEntity<Guid>
         return $"{Code} ({Id})";
     }
 
-    public void Rate(Fraction? rating, Points? extraPoints)
+    public SubmissionStateMoveResult Rate(Fraction? rating, Points? extraPoints)
     {
         if (rating is null && extraPoints is null)
         {
@@ -88,19 +88,27 @@ public partial class Submission : IEntity<Guid>
             const string extraPointsName = nameof(extraPoints);
             const string message =
                 $"Cannot update submission points, both {ratingName} and {extraPointsName} are null.";
+
             throw new DomainInvalidOperationException(message);
         }
 
-        State = State.MoveToRated(rating, extraPoints);
+        SubmissionStateMoveResult result = State.MoveToRated(rating, extraPoints);
+
+        if (result is not SubmissionStateMoveResult.Success success)
+            return result;
+
+        State = success.State;
 
         if (rating is not null)
             Rating = rating;
 
         if (extraPoints is not null)
             ExtraPoints = extraPoints;
+
+        return success;
     }
 
-    public void UpdatePoints(Fraction? rating, Points? extraPoints)
+    public SubmissionStateMoveResult UpdatePoints(Fraction? rating, Points? extraPoints)
     {
         if (rating is null && extraPoints is null)
         {
@@ -111,13 +119,20 @@ public partial class Submission : IEntity<Guid>
             throw new DomainInvalidOperationException(message);
         }
 
-        State = State.MoveToPointsUpdated(rating, extraPoints);
+        SubmissionStateMoveResult result = State.MoveToPointsUpdated(rating, extraPoints);
+
+        if (result is not SubmissionStateMoveResult.Success success)
+            return result;
+
+        State = success.State;
 
         if (rating is not null)
             Rating = rating;
 
         if (extraPoints is not null)
             ExtraPoints = extraPoints;
+
+        return success;
     }
 
     public RatedSubmission CalculateRatedSubmission(Assignment assignment, DeadlinePolicy policy)
@@ -131,39 +146,44 @@ public partial class Submission : IEntity<Guid>
         return new RatedSubmission(this, totalPoints, pointsWithPenalty, pointPenalty, rawPoints);
     }
 
-    public void UpdateDate(SpbDateTime newDate)
+    public SubmissionStateMoveResult UpdateDate(SpbDateTime newDate)
     {
-        State = State.MoveToDateUpdated(newDate);
+        SubmissionStateMoveResult result = State.MoveToDateUpdated(newDate);
+
+        if (result is not SubmissionStateMoveResult.Success success)
+            return result;
+
+        State = success.State;
         SubmissionDate = newDate;
+
+        return success;
     }
 
-    public void Activate()
-    {
-        State = State.MoveToActivated();
-    }
+    public SubmissionStateMoveResult Activate()
+        => HandleMoveResult(State.MoveToActivated());
 
-    public void Deactivate()
-    {
-        State = State.MoveToDeactivated();
-    }
+    public SubmissionStateMoveResult Deactivate()
+        => HandleMoveResult(State.MoveToDeactivated());
 
-    public void Ban()
-    {
-        State = State.MoveToBanned();
-    }
+    public SubmissionStateMoveResult Ban()
+        => HandleMoveResult(State.MoveToBanned());
 
-    public void Delete()
-    {
-        State = State.MoveToDeleted();
-    }
+    public SubmissionStateMoveResult Delete()
+        => HandleMoveResult(State.MoveToDeleted());
 
-    public void Complete()
-    {
-        State = State.MoveToCompleted();
-    }
+    public SubmissionStateMoveResult Complete()
+        => HandleMoveResult(State.MoveToCompleted());
 
-    public void MarkAsReviewed()
+    public SubmissionStateMoveResult MarkAsReviewed()
+        => HandleMoveResult(State.MoveToReviewed());
+
+    private SubmissionStateMoveResult HandleMoveResult(SubmissionStateMoveResult result)
     {
-        State = State.MoveToReviewed();
+        if (result is not SubmissionStateMoveResult.Success success)
+            return result;
+
+        State = success.State;
+
+        return success;
     }
 }

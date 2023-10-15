@@ -1,4 +1,3 @@
-using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Domain.Models;
 using Itmo.Dev.Asap.Core.Domain.Tools;
 using Itmo.Dev.Asap.Core.Domain.ValueObject;
@@ -11,50 +10,30 @@ public class ActiveSubmissionState : ISubmissionState
 
     public bool IsTerminalEffectiveState => false;
 
-    public ISubmissionState MoveToRated(Fraction? rating, Points? extraPoints)
-    {
-        return new CompletedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToRated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.Success(new CompletedSubmissionState());
 
-    public ISubmissionState MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
-    {
-        const string message = "Cannot update submission points. It has not been rated yet";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToBanned()
-    {
-        return new BannedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToBanned()
+        => new SubmissionStateMoveResult.Success(new BannedSubmissionState());
 
-    public ISubmissionState MoveToActivated()
-    {
-        const string message = "Submission is already active";
-        throw new DomainInvalidOperationException(message);
-    }
+    public SubmissionStateMoveResult MoveToActivated()
+        => new SubmissionStateMoveResult.InvalidMove();
 
-    public ISubmissionState MoveToDeactivated()
-    {
-        return new InactiveSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToDeactivated()
+        => new SubmissionStateMoveResult.Success(new InactiveSubmissionState());
 
-    public ISubmissionState MoveToDateUpdated(SpbDateTime newDate)
-    {
-        return this;
-    }
+    public SubmissionStateMoveResult MoveToDateUpdated(SpbDateTime newDate)
+        => new SubmissionStateMoveResult.Success(this);
 
-    public ISubmissionState MoveToDeleted()
-    {
-        return new DeletedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToDeleted()
+        => new SubmissionStateMoveResult.Success(new DeletedSubmissionState());
 
-    public ISubmissionState MoveToCompleted()
-    {
-        return new CompletedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToCompleted()
+        => new SubmissionStateMoveResult.Success(new CompletedSubmissionState());
 
-    public ISubmissionState MoveToReviewed()
-    {
-        return new ReviewedSubmissionState();
-    }
+    public SubmissionStateMoveResult MoveToReviewed()
+        => new SubmissionStateMoveResult.Success(new ReviewedSubmissionState());
 }
