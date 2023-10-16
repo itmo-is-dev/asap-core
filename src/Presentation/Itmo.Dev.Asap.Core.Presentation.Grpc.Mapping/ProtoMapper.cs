@@ -6,7 +6,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 
-[Mapper]
+[Mapper(EnumMappingStrategy = EnumMappingStrategy.ByName)]
 public static partial class ProtoMapper
 {
     public static Guid ToGuid(this string value)
