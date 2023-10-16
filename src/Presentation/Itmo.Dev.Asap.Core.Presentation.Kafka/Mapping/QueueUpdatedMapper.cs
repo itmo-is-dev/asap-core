@@ -1,7 +1,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Queues.Notifications;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Dto.Tables;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Kafka;
 using Riok.Mapperly.Abstractions;
 

@@ -8,7 +8,7 @@ using Itmo.Dev.Asap.Core.Application.Abstractions.SubjectCourses;
 using Itmo.Dev.Asap.Core.Application.Abstractions.Submissions;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
 using Itmo.Dev.Asap.Core.Application.Dto.Querying;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Queries;
 using Itmo.Dev.Asap.Core.Application.Queries.Adapters;
 using Itmo.Dev.Asap.Core.Application.Queries.Requests;

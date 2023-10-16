@@ -1,6 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
+using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
-using Itmo.Dev.Asap.Core.Application.Dto.Users;
 using Itmo.Dev.Asap.Core.Models;
 using Riok.Mapperly.Abstractions;
 
