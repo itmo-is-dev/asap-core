@@ -24,9 +24,7 @@ internal class TableUpdateNotificationHandler :
     INotificationHandler<SubjectCourseGroupCreated.Notification>,
     INotificationHandler<SubjectCourseGroupDeleted.Notification>,
     INotificationHandler<DeadlinePolicyAdded.Notification>,
-    INotificationHandler<SubmissionPointsUpdated.Notification>,
     INotificationHandler<SubmissionStateUpdated.Notification>,
-    INotificationHandler<SubmissionUpdated.Notification>,
     INotificationHandler<StudentTransferred.Notification>
 {
     private readonly IPersistenceContext _context;
@@ -100,15 +98,6 @@ internal class TableUpdateNotificationHandler :
         return Task.CompletedTask;
     }
 
-    public async Task Handle(SubmissionPointsUpdated.Notification notification, CancellationToken cancellationToken)
-    {
-        SubjectCourse subjectCourse = await _context.SubjectCourses.GetByAssignmentId(
-            notification.Submission.AssignmentId,
-            cancellationToken);
-
-        _subjectCourseUpdateService.UpdatePoints(subjectCourse.Id);
-    }
-
     public async Task Handle(SubmissionStateUpdated.Notification notification, CancellationToken cancellationToken)
     {
         SubjectCourse subjectCourse = await _context.SubjectCourses.GetByAssignmentId(
@@ -119,20 +108,6 @@ internal class TableUpdateNotificationHandler :
             notification.Submission.StudentId,
             cancellationToken);
 
-        _queueUpdateService.Update(subjectCourse.Id, group.Id);
-    }
-
-    public async Task Handle(SubmissionUpdated.Notification notification, CancellationToken cancellationToken)
-    {
-        SubjectCourse subjectCourse = await _context.SubjectCourses.GetByAssignmentId(
-            notification.Submission.AssignmentId,
-            cancellationToken);
-
-        StudentGroup group = await _context.StudentGroups.GetByStudentId(
-            notification.Submission.StudentId,
-            cancellationToken);
-
-        _subjectCourseUpdateService.UpdatePoints(subjectCourse.Id);
         _queueUpdateService.Update(subjectCourse.Id, group.Id);
     }
 
