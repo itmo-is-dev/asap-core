@@ -1,6 +1,7 @@
 using Itmo.Dev.Asap.Core.Application.Dto.Students;
 using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Domain.Students;
+using Itmo.Dev.Asap.Core.Domain.Study;
 
 namespace Itmo.Dev.Asap.Core.Mapping;
 
@@ -25,5 +26,16 @@ public static class StudentMapping
             submission.SubmissionDate,
             submission.State is SubmissionStateDto.Banned,
             submission.Points);
+    }
+
+    public static StudentAssignmentPointsDto ToDto(this StudentAssignmentPoints points)
+    {
+        return new StudentAssignmentPointsDto(
+            points.Student.UserId,
+            points.Assignment.Id,
+            points.Assignment.SubjectCourseId,
+            points.SubmissionDate.ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.Zero)),
+            points.IsBanned,
+            points.Points.Value);
     }
 }
