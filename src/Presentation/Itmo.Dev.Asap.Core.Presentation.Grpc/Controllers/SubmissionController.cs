@@ -37,6 +37,33 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         return response.MapFrom();
     }
 
+    public override async Task<UnbanResponse> Unban(UnbanRequest request, ServerCallContext context)
+    {
+        UnbanSubmission.Command command = request.MapTo();
+        UnbanSubmission.Response response = await _mediator.Send(command, context.CancellationToken);
+
+        return response switch
+        {
+            UnbanSubmission.Response.Success success => new UnbanResponse
+            {
+                Success = new UnbanResponse.Types.Success
+                {
+                    Submission = success.Submission.MapToProtoSubmission(),
+                },
+            },
+
+            UnbanSubmission.Response.InvalidMove invalidMove => new UnbanResponse
+            {
+                InvalidMove = new UnbanResponse.Types.InvalidMove
+                {
+                    SourceState = invalidMove.SourceState.MapToSubmissionState(),
+                },
+            },
+
+            _ => throw new RpcException(new Status(StatusCode.Internal, "Operation yielded in unexpected result")),
+        };
+    }
+
     public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
     {
         CreateSubmission.Command command = request.MapTo();

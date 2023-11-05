@@ -14,6 +14,8 @@ internal static partial class SubmissionServiceMapper
 
     public static partial BanSubmission.Command MapTo(this BanRequest request);
 
+    public static partial UnbanSubmission.Command MapTo(this UnbanRequest request);
+
     public static partial CreateSubmission.Command MapTo(this CreateRequest request);
 
     public static partial DeactivateSubmission.Command MapTo(this DeactivateRequest request);

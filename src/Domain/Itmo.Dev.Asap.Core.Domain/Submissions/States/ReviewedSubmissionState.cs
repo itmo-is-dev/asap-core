@@ -19,6 +19,9 @@ public class ReviewedSubmissionState : ISubmissionState
     public SubmissionStateMoveResult MoveToBanned()
         => new SubmissionStateMoveResult.Success(new BannedSubmissionState());
 
+    public SubmissionStateMoveResult MoveToUnbanned()
+        => new SubmissionStateMoveResult.InvalidMove();
+
     public SubmissionStateMoveResult MoveToActivated()
         => new SubmissionStateMoveResult.InvalidMove();
 

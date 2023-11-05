@@ -19,6 +19,8 @@ public interface ISubmissionState
 
     SubmissionStateMoveResult MoveToBanned();
 
+    SubmissionStateMoveResult MoveToUnbanned();
+
     SubmissionStateMoveResult MoveToActivated();
 
     SubmissionStateMoveResult MoveToDeactivated();

@@ -168,6 +168,9 @@ public partial class Submission : IEntity<Guid>
     public SubmissionStateMoveResult Ban()
         => HandleMoveResult(State.MoveToBanned());
 
+    public SubmissionStateMoveResult Unban()
+        => HandleMoveResult(State.MoveToUnbanned());
+
     public SubmissionStateMoveResult Delete()
         => HandleMoveResult(State.MoveToDeleted());
 
