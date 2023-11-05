@@ -37,6 +37,7 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
             .SingleAsync(cancellationToken);
 
         StudentModel studentModel = await _context.Students
+            .Include(x => x.StudentGroup)
             .AsNoTrackingWithIdentityResolution()
             .Where(x => x.UserId.Equals(studentId))
             .SingleAsync(cancellationToken);
