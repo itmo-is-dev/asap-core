@@ -3,6 +3,7 @@ using Itmo.Dev.Asap.Core.Application.DataAccess.Repositories;
 using Itmo.Dev.Asap.Core.DataAccess.Contexts;
 using Itmo.Dev.Asap.Core.DataAccess.Mapping;
 using Itmo.Dev.Asap.Core.DataAccess.Models;
+using Itmo.Dev.Asap.Core.DataAccess.Models.Users;
 using Itmo.Dev.Asap.Core.Domain.Students;
 using Itmo.Dev.Asap.Core.Domain.Study;
 using Itmo.Dev.Asap.Core.Domain.Study.Assignments;
@@ -24,6 +25,62 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
     {
         _context = context;
         _subjectCourseRepository = subjectCourseRepository;
+    }
+
+    public async Task<StudentAssignment> GetByIdAsync(
+        Guid studentId,
+        Guid assignmentId,
+        CancellationToken cancellationToken)
+    {
+        SubjectCourse subjectCourse = await _subjectCourseRepository
+            .QueryAsync(SubjectCourseQuery.Build(x => x.WithAssignmentId(assignmentId)), cancellationToken)
+            .SingleAsync(cancellationToken);
+
+        StudentModel studentModel = await _context.Students
+            .Include(x => x.StudentGroup)
+            .Include(x => x.User)
+            .ThenInclude(x => x.Associations)
+            .AsNoTrackingWithIdentityResolution()
+            .Where(x => x.UserId.Equals(studentId))
+            .SingleAsync(cancellationToken);
+
+        Student student = StudentMapper.MapTo(studentModel);
+
+        AssignmentModel assignmentModel = await _context.Assignments
+            .Include(x => x.GroupAssignments)
+            .ThenInclude(x => x.StudentGroup)
+            .AsNoTrackingWithIdentityResolution()
+            .Where(x => x.Id.Equals(assignmentId))
+            .SingleAsync(cancellationToken);
+
+        List<SubmissionModel> submissionModels = await _context.Submissions
+            .AsNoTrackingWithIdentityResolution()
+            .Where(x => x.StudentId.Equals(studentId))
+            .Where(x => x.AssignmentId.Equals(assignmentId))
+            .ToListAsync(cancellationToken);
+
+        GroupAssignment[] groupAssignments = assignmentModel.GroupAssignments
+            .Select(ga => GroupAssignmentMapper.MapTo(
+                ga,
+                ga.StudentGroup.Name,
+                ga.Assignment.Title,
+                ga.Assignment.ShortName))
+            .ToArray();
+
+        Submission[] submissions = submissionModels
+            .Join(
+                groupAssignments,
+                x => x.StudentGroupId,
+                x => x.Id.StudentGroupId,
+                (s, ga) => SubmissionMapper.MapTo(s, ga, student))
+            .ToArray();
+
+        return new StudentAssignment(
+            student,
+            AssignmentMapper.MapTo(assignmentModel),
+            groupAssignments,
+            submissions,
+            subjectCourse);
     }
 
     public async IAsyncEnumerable<StudentAssignment> GetBySubjectCourseIdAsync(
@@ -96,7 +153,7 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
                     x.ga.Assignment.Title,
                     x.ga.Assignment.ShortName);
 
-                return SubmissionMapper.MapTo(x.s, groupAssignment);
+                return SubmissionMapper.MapTo(x.s, groupAssignment, StudentMapper.MapTo(x.s.Student));
             })
             .ToArray();
 

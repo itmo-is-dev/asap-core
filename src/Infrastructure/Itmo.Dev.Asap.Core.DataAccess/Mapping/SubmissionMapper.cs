@@ -11,7 +11,8 @@ public static class SubmissionMapper
 {
     public static Submission MapTo(
         SubmissionModel model,
-        GroupAssignment groupAssignment)
+        GroupAssignment groupAssignment,
+        Student student)
     {
         ISubmissionState state = model.State switch
         {
@@ -27,8 +28,6 @@ public static class SubmissionMapper
                 model.State,
                 "Invalid submission state value"),
         };
-
-        Student student = StudentMapper.MapTo(model.Student);
 
         return new Submission(
             model.Id,

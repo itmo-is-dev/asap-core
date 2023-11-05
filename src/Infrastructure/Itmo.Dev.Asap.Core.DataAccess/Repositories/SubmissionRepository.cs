@@ -42,7 +42,8 @@ public class SubmissionRepository : ISubmissionRepository
             .AsAsyncEnumerable()
             .Select(x => SubmissionMapper.MapTo(
                 x.submission,
-                GroupAssignmentMapper.MapTo(x.groupAssignment, x.groupName, x.assignmentTitle, x.assignmentShortName)));
+                GroupAssignmentMapper.MapTo(x.groupAssignment, x.groupName, x.assignmentTitle, x.assignmentShortName),
+                StudentMapper.MapTo(x.submission.Student)));
     }
 
     public Task<int> CountAsync(SubmissionQuery query, CancellationToken cancellationToken)
