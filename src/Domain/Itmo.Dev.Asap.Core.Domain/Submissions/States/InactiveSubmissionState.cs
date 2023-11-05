@@ -14,12 +14,13 @@ public class InactiveSubmissionState : ISubmissionState
         => new SubmissionStateMoveResult.InvalidMove();
 
     public SubmissionStateMoveResult MoveToPointsUpdated(Fraction? rating, Points? extraPoints)
-    {
-        return new SubmissionStateMoveResult.InvalidMove();
-    }
+        => new SubmissionStateMoveResult.InvalidMove();
 
     public SubmissionStateMoveResult MoveToBanned()
         => new SubmissionStateMoveResult.Success(new BannedSubmissionState());
+
+    public SubmissionStateMoveResult MoveToUnbanned()
+        => new SubmissionStateMoveResult.InvalidMove();
 
     public SubmissionStateMoveResult MoveToActivated()
         => new SubmissionStateMoveResult.Success(new ActiveSubmissionState());
