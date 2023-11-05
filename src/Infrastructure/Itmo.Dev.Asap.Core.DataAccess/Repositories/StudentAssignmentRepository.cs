@@ -37,18 +37,21 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
             .SingleAsync(cancellationToken);
 
         StudentModel studentModel = await _context.Students
+            .AsNoTrackingWithIdentityResolution()
             .Where(x => x.UserId.Equals(studentId))
             .SingleAsync(cancellationToken);
 
         AssignmentModel assignmentModel = await _context.Assignments
             .Include(x => x.GroupAssignments)
             .ThenInclude(x => x.StudentGroup)
+            .AsNoTrackingWithIdentityResolution()
             .Where(x => x.Id.Equals(assignmentId))
             .SingleAsync(cancellationToken);
 
         List<SubmissionModel> submissionModels = await _context.Submissions
+            .AsNoTrackingWithIdentityResolution()
             .Where(x => x.StudentId.Equals(studentId))
-            .Where(x => x.AssignmentId.Equals(assignmentModel))
+            .Where(x => x.AssignmentId.Equals(assignmentId))
             .ToListAsync(cancellationToken);
 
         GroupAssignment[] groupAssignments = assignmentModel.GroupAssignments
