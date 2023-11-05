@@ -11,6 +11,8 @@ internal static class UnbanSubmission
     {
         public sealed record Success(SubmissionDto Submission) : Response;
 
+        public sealed record Unauthorized : Response;
+
         public sealed record InvalidMove(SubmissionStateDto SourceState) : Response;
     }
 }

@@ -52,6 +52,11 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
                 },
             },
 
+            UnbanSubmission.Response.Unauthorized => new UnbanResponse
+            {
+                Unauthorized = new UnbanResponse.Types.Unauthorized(),
+            },
+
             UnbanSubmission.Response.InvalidMove invalidMove => new UnbanResponse
             {
                 InvalidMove = new UnbanResponse.Types.InvalidMove

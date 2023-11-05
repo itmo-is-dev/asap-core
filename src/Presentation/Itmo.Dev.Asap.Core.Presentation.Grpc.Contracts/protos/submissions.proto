@@ -48,11 +48,15 @@ message UnbanRequest {
 message UnbanResponse {
   oneof result {
     Success success = 1;
-    InvalidMove invalid_move = 2;
+    Unauthorized unauthorized = 2;
+    InvalidMove invalid_move = 3;
   }
   
   message Success {
     Submission submission = 1;
+  }
+  
+  message Unauthorized {
   }
   
   message InvalidMove {

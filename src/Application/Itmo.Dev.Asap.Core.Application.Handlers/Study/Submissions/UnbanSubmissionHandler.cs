@@ -37,10 +37,13 @@ internal class UnbanSubmissionHandler : IRequestHandler<Command, Response>
                 request.Code,
                 cancellationToken);
 
-        await _permissionValidator.EnsureSubmissionMentorAsync(
+        bool isAuthorized = await _permissionValidator.IsSubmissionMentorAsync(
             request.IssuerId,
             submission.Id,
             cancellationToken);
+
+        if (isAuthorized is false)
+            return new Response.Unauthorized();
 
         SubmissionStateMoveResult result = submission.Unban();
 
