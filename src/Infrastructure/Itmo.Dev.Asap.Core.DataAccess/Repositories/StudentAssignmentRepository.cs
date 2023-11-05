@@ -44,6 +44,8 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
             .Where(x => x.UserId.Equals(studentId))
             .SingleAsync(cancellationToken);
 
+        Student student = StudentMapper.MapTo(studentModel);
+
         AssignmentModel assignmentModel = await _context.Assignments
             .Include(x => x.GroupAssignments)
             .ThenInclude(x => x.StudentGroup)
@@ -70,11 +72,11 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
                 groupAssignments,
                 x => x.StudentGroupId,
                 x => x.Id.StudentGroupId,
-                SubmissionMapper.MapTo)
+                (s, ga) => SubmissionMapper.MapTo(s, ga, student))
             .ToArray();
 
         return new StudentAssignment(
-            StudentMapper.MapTo(studentModel),
+            student,
             AssignmentMapper.MapTo(assignmentModel),
             groupAssignments,
             submissions,
@@ -151,7 +153,7 @@ public class StudentAssignmentRepository : IStudentAssignmentRepository
                     x.ga.Assignment.Title,
                     x.ga.Assignment.ShortName);
 
-                return SubmissionMapper.MapTo(x.s, groupAssignment);
+                return SubmissionMapper.MapTo(x.s, groupAssignment, StudentMapper.MapTo(x.s.Student));
             })
             .ToArray();
 
