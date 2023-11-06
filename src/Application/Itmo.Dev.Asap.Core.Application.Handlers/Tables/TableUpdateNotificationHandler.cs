@@ -25,6 +25,7 @@ internal class TableUpdateNotificationHandler :
     INotificationHandler<SubjectCourseGroupDeleted.Notification>,
     INotificationHandler<DeadlinePolicyAdded.Notification>,
     INotificationHandler<SubmissionStateUpdated.Notification>,
+    INotificationHandler<SubmissionUpdated.Notification>,
     INotificationHandler<StudentTransferred.Notification>
 {
     private readonly IPersistenceContext _context;
@@ -99,6 +100,19 @@ internal class TableUpdateNotificationHandler :
     }
 
     public async Task Handle(SubmissionStateUpdated.Notification notification, CancellationToken cancellationToken)
+    {
+        SubjectCourse subjectCourse = await _context.SubjectCourses.GetByAssignmentId(
+            notification.Submission.AssignmentId,
+            cancellationToken);
+
+        StudentGroup group = await _context.StudentGroups.GetByStudentId(
+            notification.Submission.StudentId,
+            cancellationToken);
+
+        _queueUpdateService.Update(subjectCourse.Id, group.Id);
+    }
+
+    public async Task Handle(SubmissionUpdated.Notification notification, CancellationToken cancellationToken)
     {
         SubjectCourse subjectCourse = await _context.SubjectCourses.GetByAssignmentId(
             notification.Submission.AssignmentId,
