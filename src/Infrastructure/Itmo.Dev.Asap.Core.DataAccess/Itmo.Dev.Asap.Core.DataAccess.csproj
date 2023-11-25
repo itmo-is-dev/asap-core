@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <NoWarn>$(NoWarn);IDE0161;CA2227</NoWarn>
+        <NoWarn>$(NoWarn);IDE0161;CA2227;CA2208</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
