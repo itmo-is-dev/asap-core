@@ -7,6 +7,7 @@ using Itmo.Dev.Platform.Logging.Extensions;
 using Itmo.Dev.Platform.Postgres.Models;
 using Itmo.Dev.Platform.YandexCloud.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -52,6 +53,8 @@ app.UseSwaggerUI();
 
 app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseRouting();
+app.UseHttpMetrics();
+app.UseGrpcMetrics();
 app.UsePlatformSentryTracing(builder.Configuration);
 
 app.UseGrpcPresentation();
