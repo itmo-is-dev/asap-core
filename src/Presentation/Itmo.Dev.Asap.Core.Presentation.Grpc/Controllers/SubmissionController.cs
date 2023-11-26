@@ -228,7 +228,7 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         return new QueryFirstCompletedSubmissionResponse
         {
             Submission = { submissions },
-            PageToken = JsonConvert.SerializeObject(response.PageToken),
+            PageToken = response.PageToken is null ? null : JsonConvert.SerializeObject(response.PageToken),
         };
     }
 }
