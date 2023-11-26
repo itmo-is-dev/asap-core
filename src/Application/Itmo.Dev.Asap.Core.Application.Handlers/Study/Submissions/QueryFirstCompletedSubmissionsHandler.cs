@@ -26,7 +26,7 @@ internal class QueryFirstCompletedSubmissionsHandler : IRequestHandler<Query, Re
 
         FirstSubmissionDto[] submissions = await _context.Submissions
             .QueryFirstSubmissionsAsync(query, cancellationToken)
-            .Select(x => new FirstSubmissionDto(x.Id, x.Student.UserId, x.GroupAssignment.Id.AssignmentId))
+            .Select(x => new FirstSubmissionDto(x.Id, x.StudentId, x.AssignmentId))
             .ToArrayAsync(cancellationToken);
 
         PageToken? pageToken = submissions.Length.Equals(request.PageSize)

@@ -1,3 +1,4 @@
+using Itmo.Dev.Asap.Core.Application.DataAccess.Models;
 using Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
 
@@ -7,7 +8,7 @@ public interface ISubmissionRepository
 {
     IAsyncEnumerable<Submission> QueryAsync(SubmissionQuery query, CancellationToken cancellationToken);
 
-    IAsyncEnumerable<Submission> QueryFirstSubmissionsAsync(
+    IAsyncEnumerable<FirstSubmissionModel> QueryFirstSubmissionsAsync(
         FirstSubmissionQuery query,
         CancellationToken cancellationToken);
 

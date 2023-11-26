@@ -6,8 +6,11 @@ using Itmo.Dev.Asap.Core.DataAccess.Mapping;
 using Itmo.Dev.Asap.Core.DataAccess.Models;
 using Itmo.Dev.Asap.Core.DataAccess.Tools;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
+using Itmo.Dev.Platform.Postgres.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Npgsql;
+using System.Runtime.CompilerServices;
 
 namespace Itmo.Dev.Asap.Core.DataAccess.Repositories;
 
@@ -46,40 +49,51 @@ public class SubmissionRepository : ISubmissionRepository
                 StudentMapper.MapTo(x.submission.Student)));
     }
 
-    public IAsyncEnumerable<Submission> QueryFirstSubmissionsAsync(
+    public async IAsyncEnumerable<FirstSubmissionModel> QueryFirstSubmissionsAsync(
         FirstSubmissionQuery query,
-        CancellationToken cancellationToken)
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        IQueryable<SubmissionModel> queryable = _context.Submissions;
+        const string sql = """
+        select nth_value(s."Id", 1) over (partition by (s."StudentId", s."AssignmentId") order by s."SubmissionDate") as "Id", 
+               nth_value(s."StudentId", 1) over (partition by (s."StudentId", s."AssignmentId") order by s."SubmissionDate") as "StudentId", 
+               nth_value(s."AssignmentId", 1) over (partition by (s."StudentId", s."AssignmentId") order by s."SubmissionDate") as "AssignmentId" 
+        from "Submissions" s
+        join "Assignments" a on a."Id" = s."AssignmentId"
+        where
+            a."SubjectCourseId" = :subject_course_id
+            and s."State" = any (:states)
+            and (:skip_user_id_filter or s."StudentId" >= :user_id) 
+            and (:skip_assignment_id_filter or s."AssignmentId" > :assignment_id)
+        order by (s."StudentId", s."AssignmentId")
+        limit :limit
+        """;
 
-        queryable = queryable.Where(x => query.States.Contains(x.State));
+        var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
 
-        if (query.PageToken is not null)
+        await using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
+            .AddParameter("subject_course_id", query.SubjectCourseId)
+            .AddParameter("states", query.States)
+            .AddParameter("skip_user_id_filter", query.PageToken is null)
+            .AddParameter("skip_assignment_id_filter", query.PageToken is null)
+            .AddParameter("user_id", query.PageToken?.UserId ?? Guid.Empty)
+            .AddParameter("assignment_id", query.PageToken?.AssignmentId ?? Guid.Empty)
+            .AddParameter("limit", query.PageSize);
+
+        await _context.Database.OpenConnectionAsync(cancellationToken);
+
+        await using NpgsqlDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        int id = reader.GetOrdinal("Id");
+        int studentId = reader.GetOrdinal("StudentId");
+        int assignmentId = reader.GetOrdinal("AssignmentId");
+
+        while (await reader.ReadAsync(cancellationToken))
         {
-            queryable = queryable
-                .Where(x => x.StudentId >= query.PageToken.UserId && x.AssignmentId > query.PageToken.AssignmentId)
-                .OrderBy(x => new { x.StudentId, x.AssignmentId });
+            yield return new FirstSubmissionModel(
+                Id: reader.GetGuid(id),
+                StudentId: reader.GetGuid(studentId),
+                AssignmentId: reader.GetGuid(assignmentId));
         }
-
-        queryable = queryable.GroupBy(
-            model => new { model.StudentId, model.AssignmentId },
-            (_, enumerable) => enumerable.OrderBy(s => s.SubmissionDate).First());
-
-        var finalQueryable = queryable.Select(submission => new
-        {
-            submission,
-            groupAssignment = submission.GroupAssignment,
-            groupName = submission.GroupAssignment.StudentGroup.Name,
-            assignmentTitle = submission.GroupAssignment.Assignment.Title,
-            assignmentShortName = submission.GroupAssignment.Assignment.ShortName,
-        });
-
-        return finalQueryable
-            .AsAsyncEnumerable()
-            .Select(x => SubmissionMapper.MapTo(
-                x.submission,
-                GroupAssignmentMapper.MapTo(x.groupAssignment, x.groupName, x.assignmentTitle, x.assignmentShortName),
-                StudentMapper.MapTo(x.submission.Student)));
     }
 
     public Task<int> CountAsync(SubmissionQuery query, CancellationToken cancellationToken)
