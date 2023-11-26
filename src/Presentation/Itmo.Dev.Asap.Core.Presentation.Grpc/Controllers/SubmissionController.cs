@@ -1,5 +1,6 @@
 using Grpc.Core;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands;
+using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Queries;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
 using Itmo.Dev.Asap.Core.Common.Exceptions;
 using Itmo.Dev.Asap.Core.Models;
@@ -7,6 +8,7 @@ using Itmo.Dev.Asap.Core.Presentation.Grpc.Mapping;
 using Itmo.Dev.Asap.Core.Submissions;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Controllers;
 
@@ -198,5 +200,31 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         _logger.LogInformation("Returning submission rate = {Rate}", dto);
 
         return new UpdateResponse { Submission = dto };
+    }
+
+    public override async Task<QueryFirstCompletedSubmissionResponse> QueryFirstCompletedSubmission(
+        QueryFirstCompletedSubmissionRequest request,
+        ServerCallContext context)
+    {
+        var query = new QueryFirstCompletedSubmissions.Query(
+            request.SubjectCourseId.ToGuid(),
+            JsonConvert.DeserializeObject<QueryFirstCompletedSubmissions.PageToken>(request.PageToken),
+            request.PageSize);
+
+        QueryFirstCompletedSubmissions.Response response = await _mediator.Send(query, context.CancellationToken);
+
+        IEnumerable<QueryFirstCompletedSubmissionResponse.Types.FirstSubmission> submissions = response.Submissions
+            .Select(submission => new QueryFirstCompletedSubmissionResponse.Types.FirstSubmission
+            {
+                SubmissionId = submission.Id.ToString(),
+                UserId = submission.UserId.ToString(),
+                AssignmentId = submission.AssignmentId.ToString(),
+            });
+
+        return new QueryFirstCompletedSubmissionResponse
+        {
+            Submission = { submissions },
+            PageToken = JsonConvert.SerializeObject(response.PageToken),
+        };
     }
 }

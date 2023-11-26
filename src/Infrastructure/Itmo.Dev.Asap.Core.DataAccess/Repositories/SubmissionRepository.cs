@@ -46,6 +46,42 @@ public class SubmissionRepository : ISubmissionRepository
                 StudentMapper.MapTo(x.submission.Student)));
     }
 
+    public IAsyncEnumerable<Submission> QueryFirstSubmissionsAsync(
+        FirstSubmissionQuery query,
+        CancellationToken cancellationToken)
+    {
+        IQueryable<SubmissionModel> queryable = _context.Submissions;
+
+        queryable = queryable.Where(x => query.States.Contains(x.State));
+
+        if (query.PageToken is not null)
+        {
+            queryable = queryable
+                .Where(x => x.StudentId >= query.PageToken.UserId && x.AssignmentId > query.PageToken.AssignmentId)
+                .OrderBy(x => new { x.StudentId, x.AssignmentId });
+        }
+
+        queryable = queryable.GroupBy(
+            model => new { model.StudentId, model.AssignmentId },
+            (_, enumerable) => enumerable.OrderBy(s => s.SubmissionDate).First());
+
+        var finalQueryable = queryable.Select(submission => new
+        {
+            submission,
+            groupAssignment = submission.GroupAssignment,
+            groupName = submission.GroupAssignment.StudentGroup.Name,
+            assignmentTitle = submission.GroupAssignment.Assignment.Title,
+            assignmentShortName = submission.GroupAssignment.Assignment.ShortName,
+        });
+
+        return finalQueryable
+            .AsAsyncEnumerable()
+            .Select(x => SubmissionMapper.MapTo(
+                x.submission,
+                GroupAssignmentMapper.MapTo(x.groupAssignment, x.groupName, x.assignmentTitle, x.assignmentShortName),
+                StudentMapper.MapTo(x.submission.Student)));
+    }
+
     public Task<int> CountAsync(SubmissionQuery query, CancellationToken cancellationToken)
     {
         IQueryable<SubmissionModel> queryable = ApplyQuery(_context.Submissions, query);

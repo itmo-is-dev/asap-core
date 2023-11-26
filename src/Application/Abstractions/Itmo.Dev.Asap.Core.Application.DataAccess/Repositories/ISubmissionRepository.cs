@@ -7,6 +7,10 @@ public interface ISubmissionRepository
 {
     IAsyncEnumerable<Submission> QueryAsync(SubmissionQuery query, CancellationToken cancellationToken);
 
+    IAsyncEnumerable<Submission> QueryFirstSubmissionsAsync(
+        FirstSubmissionQuery query,
+        CancellationToken cancellationToken);
+
     Task<int> CountAsync(SubmissionQuery query, CancellationToken cancellationToken);
 
     void Add(Submission submission);
