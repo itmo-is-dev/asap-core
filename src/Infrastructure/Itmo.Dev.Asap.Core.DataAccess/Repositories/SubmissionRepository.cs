@@ -72,7 +72,7 @@ public class SubmissionRepository : ISubmissionRepository
 
         await using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
             .AddParameter("subject_course_id", query.SubjectCourseId)
-            .AddParameter("states", query.States)
+            .AddParameter("states", query.States.Select(x => (int)x).ToArray())
             .AddParameter("skip_user_id_filter", query.PageToken is null)
             .AddParameter("skip_assignment_id_filter", query.PageToken is null)
             .AddParameter("user_id", query.PageToken?.UserId ?? Guid.Empty)
