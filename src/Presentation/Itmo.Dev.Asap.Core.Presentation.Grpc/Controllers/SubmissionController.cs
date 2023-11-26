@@ -206,9 +206,13 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
         QueryFirstCompletedSubmissionRequest request,
         ServerCallContext context)
     {
+        QueryFirstCompletedSubmissions.PageToken? pageToken = request.PageToken is null
+            ? null
+            : JsonConvert.DeserializeObject<QueryFirstCompletedSubmissions.PageToken>(request.PageToken);
+
         var query = new QueryFirstCompletedSubmissions.Query(
             request.SubjectCourseId.ToGuid(),
-            JsonConvert.DeserializeObject<QueryFirstCompletedSubmissions.PageToken>(request.PageToken),
+            pageToken,
             request.PageSize);
 
         QueryFirstCompletedSubmissions.Response response = await _mediator.Send(query, context.CancellationToken);
