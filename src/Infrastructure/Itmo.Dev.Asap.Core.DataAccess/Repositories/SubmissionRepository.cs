@@ -6,8 +6,11 @@ using Itmo.Dev.Asap.Core.DataAccess.Mapping;
 using Itmo.Dev.Asap.Core.DataAccess.Models;
 using Itmo.Dev.Asap.Core.DataAccess.Tools;
 using Itmo.Dev.Asap.Core.Domain.Submissions;
+using Itmo.Dev.Platform.Postgres.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Npgsql;
+using System.Runtime.CompilerServices;
 
 namespace Itmo.Dev.Asap.Core.DataAccess.Repositories;
 
@@ -44,6 +47,53 @@ public class SubmissionRepository : ISubmissionRepository
                 x.submission,
                 GroupAssignmentMapper.MapTo(x.groupAssignment, x.groupName, x.assignmentTitle, x.assignmentShortName),
                 StudentMapper.MapTo(x.submission.Student)));
+    }
+
+    public async IAsyncEnumerable<FirstSubmissionModel> QueryFirstSubmissionsAsync(
+        FirstSubmissionQuery query,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        const string sql = """
+        select nth_value(s."Id", 1) over (partition by (s."StudentId", s."AssignmentId") order by s."SubmissionDate") as "Id", 
+               nth_value(s."StudentId", 1) over (partition by (s."StudentId", s."AssignmentId") order by s."SubmissionDate") as "StudentId", 
+               nth_value(s."AssignmentId", 1) over (partition by (s."StudentId", s."AssignmentId") order by s."SubmissionDate") as "AssignmentId" 
+        from "Submissions" s
+        join "Assignments" a on a."Id" = s."AssignmentId"
+        where
+            a."SubjectCourseId" = :subject_course_id
+            and s."State" = any (:states)
+            and (:skip_user_id_filter or s."StudentId" >= :user_id) 
+            and (:skip_assignment_id_filter or s."AssignmentId" > :assignment_id)
+        order by (s."StudentId", s."AssignmentId")
+        limit :limit
+        """;
+
+        var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
+
+        await using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
+            .AddParameter("subject_course_id", query.SubjectCourseId)
+            .AddParameter("states", query.States.Select(x => (int)x).ToArray())
+            .AddParameter("skip_user_id_filter", query.PageToken is null)
+            .AddParameter("skip_assignment_id_filter", query.PageToken is null)
+            .AddParameter("user_id", query.PageToken?.UserId ?? Guid.Empty)
+            .AddParameter("assignment_id", query.PageToken?.AssignmentId ?? Guid.Empty)
+            .AddParameter("limit", query.PageSize);
+
+        await _context.Database.OpenConnectionAsync(cancellationToken);
+
+        await using NpgsqlDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        int id = reader.GetOrdinal("Id");
+        int studentId = reader.GetOrdinal("StudentId");
+        int assignmentId = reader.GetOrdinal("AssignmentId");
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            yield return new FirstSubmissionModel(
+                Id: reader.GetGuid(id),
+                StudentId: reader.GetGuid(studentId),
+                AssignmentId: reader.GetGuid(assignmentId));
+        }
     }
 
     public Task<int> CountAsync(SubmissionQuery query, CancellationToken cancellationToken)

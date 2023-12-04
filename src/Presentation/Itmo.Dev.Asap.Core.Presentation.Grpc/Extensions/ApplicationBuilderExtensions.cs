@@ -1,5 +1,6 @@
 using Itmo.Dev.Asap.Core.Presentation.Grpc.Controllers;
 using Microsoft.AspNetCore.Builder;
+using Prometheus;
 
 namespace Itmo.Dev.Asap.Core.Presentation.Grpc.Extensions;
 
@@ -20,6 +21,8 @@ public static class ApplicationBuilderExtensions
             x.MapGrpcService<SubmissionController>();
             x.MapGrpcService<SubmissionWorkflowController>();
             x.MapGrpcService<UserController>();
+
+            x.MapMetrics();
 
             x.MapGrpcReflectionService();
         });

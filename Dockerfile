@@ -16,7 +16,7 @@ WORKDIR "/source/src/Itmo.Dev.Asap.Core"
 RUN dotnet publish "Itmo.Dev.Asap.Core.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0.5 AS final
+EXPOSE 8012
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ASPNETCORE_URLS=http://0.0.0.0:8010
 ENTRYPOINT ["dotnet", "Itmo.Dev.Asap.Core.dll"]

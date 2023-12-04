@@ -16,6 +16,7 @@ service SubmissionService {
   rpc MarkReviewed(MarkReviewedRequest) returns (MarkReviewedResponse);
   rpc Rate(RateRequest) returns (RateResponse);
   rpc Update(UpdateRequest) returns (UpdateResponse);
+  rpc QueryFirstCompletedSubmission(QueryFirstCompletedSubmissionRequest) returns (QueryFirstCompletedSubmissionResponse);
 }
 
 message ActivateRequest {
@@ -51,14 +52,14 @@ message UnbanResponse {
     Unauthorized unauthorized = 2;
     InvalidMove invalid_move = 3;
   }
-  
+
   message Success {
     Submission submission = 1;
   }
-  
+
   message Unauthorized {
   }
-  
+
   message InvalidMove {
     SubmissionState source_state = 1;
   }
@@ -76,11 +77,11 @@ message CreateResponse {
     Success success = 1;
     Unauthorized unauthorized = 2;
   }
-  
+
   message Success {
     Submission submission = 1;
   }
-  
+
   message Unauthorized{
   }
 }
@@ -131,11 +132,11 @@ message UpdateRequest {
   string user_id = 2;
   string assignment_id = 3;
   google.protobuf.Int32Value code = 4;
-  
+
   oneof submission_date {
     google.protobuf.Timestamp submission_date_value = 5;
   }
-  
+
   google.protobuf.DoubleValue rating_percent = 6;
   google.protobuf.DoubleValue extra_points = 7;
 }
@@ -144,5 +145,22 @@ message UpdateResponse {
   oneof result {
     SubmissionRate submission = 1;
     string error_message = 2;
+  }
+}
+
+message QueryFirstCompletedSubmissionRequest {
+  string subject_course_id = 1;
+  int32 page_size = 2;
+  google.protobuf.StringValue page_token = 3;
+}
+
+message QueryFirstCompletedSubmissionResponse {
+  repeated FirstSubmission submission = 1;
+  google.protobuf.StringValue page_token = 2;
+
+  message FirstSubmission {
+    string submission_id = 1;
+    string user_id = 2;
+    string assignment_id = 3;
   }
 }

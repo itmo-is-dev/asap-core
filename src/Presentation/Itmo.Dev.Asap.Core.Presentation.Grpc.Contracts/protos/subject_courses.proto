@@ -22,6 +22,7 @@ service SubjectCourseService {
   rpc AddDeadline(AddDeadlineRequest) returns (google.protobuf.Empty);
   rpc ForceSyncPoints(ForceSyncPointsRequest) returns (google.protobuf.Empty);
   rpc UpdateMentors(UpdateMentorsRequest) returns (UpdateMentorsResponse);
+  rpc GetMentors(GetMentorsRequest) returns (GetMentorsResponse);
 }
 
 message GetByIdRequest {
@@ -109,4 +110,12 @@ message UpdateMentorsRequest {
 }
 
 message UpdateMentorsResponse {
+}
+
+message GetMentorsRequest {
+  string subject_course_id = 1;
+}
+
+message GetMentorsResponse {
+  repeated string mentor_ids = 1;
 }
