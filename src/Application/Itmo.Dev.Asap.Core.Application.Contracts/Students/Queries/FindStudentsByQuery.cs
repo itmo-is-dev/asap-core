@@ -12,7 +12,8 @@ internal static class FindStudentsByQuery
         int PageSize,
         string[] NamePatterns,
         string[] GroupNamePatterns,
-        int[] UniversityIds) : IRequest<Response>;
+        int[] UniversityIds,
+        Guid[] Ids) : IRequest<Response>;
 
     public record Response(IReadOnlyCollection<StudentDto> Students);
 }

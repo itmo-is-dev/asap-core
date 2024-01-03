@@ -19,6 +19,7 @@ internal class FindStudentsByQueryHandler : IRequestHandler<Query, Response>
     public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var query = StudentQuery.Build(x => x
+            .WithIds(request.Ids)
             .WithFullNamePatterns(request.NamePatterns)
             .WithGroupNamePatterns(request.GroupNamePatterns)
             .WithUniversityIds(request.UniversityIds)
