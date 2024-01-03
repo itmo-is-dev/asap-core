@@ -8,7 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{FCBE05
 		Directory.Build.props = Directory.Build.props
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{6595B409-A406-415C-9DC0-87F1D43053AB}"
@@ -59,6 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{058711
 	ProjectSection(SolutionItems) = preProject
 		docker\docker-compose.yaml = docker\docker-compose.yaml
 		docker\.env = docker\.env
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itmo.Dev.Asap.Core.Presentation.Kafka", "src\Presentation\Itmo.Dev.Asap.Core.Presentation.Kafka\Itmo.Dev.Asap.Core.Presentation.Kafka.csproj", "{4399D8CE-30A8-4B3C-810E-57F31230E546}"
@@ -66,6 +66,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DCADF262-0B00-49C6-B999-18CC858C64F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itmo.Dev.Asap.Core.Tests", "tests\Itmo.Dev.Asap.Core.Tests\Itmo.Dev.Asap.Core.Tests.csproj", "{A26C4B5A-8BAE-4D1C-885B-8B37E33C4080}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C29692A5-FD48-4374-964D-B09DD6B002CB}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\deploy.yml = .github\workflows\deploy.yml
+		.github\workflows\purge-allure-history.yml = .github\workflows\purge-allure-history.yml
+		.github\workflows\dotnet-build.yml = .github\workflows\dotnet-build.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +105,7 @@ Global
 		{0587117C-C37A-4F99-B43F-E373D57A93C7} = {FCBE0517-2B84-4216-AADE-7B866011B08D}
 		{4399D8CE-30A8-4B3C-810E-57F31230E546} = {7EF4EBCB-1BF2-4D0A-A95C-650BE684AE5C}
 		{A26C4B5A-8BAE-4D1C-885B-8B37E33C4080} = {DCADF262-0B00-49C6-B999-18CC858C64F6}
+		{C29692A5-FD48-4374-964D-B09DD6B002CB} = {FCBE0517-2B84-4216-AADE-7B866011B08D}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5E7825AF-FB10-43B3-9CB2-8CD713A99D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

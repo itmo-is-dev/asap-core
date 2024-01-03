@@ -69,9 +69,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           no-cache: true
-          build-args: |
-            GITHUB_USERNAME=${{ github.actor }}
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN  }}
   
   deploy:  
     needs: [environment-set, docker-image-upload]
@@ -87,7 +84,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - 
-        name: 
+        name: start container
         run: |
           docker stop asap-core || true && docker rm asap-core || true
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.environment-set.outputs.branch }}
