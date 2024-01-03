@@ -3,7 +3,6 @@ WORKDIR /source
 COPY ./src ./src
 COPY ./*.sln .
 COPY ./*.props ./
-COPY ./nuget.config .
 COPY ./.editorconfig .
 
 RUN dotnet restore "src/Itmo.Dev.Asap.Core/Itmo.Dev.Asap.Core.csproj"
