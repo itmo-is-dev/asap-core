@@ -17,7 +17,7 @@ public class CreateStudyGroupTests : CoreDatabaseTestBase
     public async Task HandleAsync_ShouldCreateGroup()
     {
         // Arrange
-        string name = Fixture.Faker.Commerce.ProductName();
+        string name = Faker.Commerce.ProductName();
 
         var publisher = new Mock<IPublisher>();
 

@@ -24,7 +24,7 @@ public class CreateSubjectCourseGroupTests : CoreDatabaseTestBase
             .Where(x => x.Assignments.Count != 0)
             .FirstAsync();
 
-        var studentGroup = new StudentGroupModel(Fixture.Faker.Random.Guid(), Fixture.Faker.Commerce.ProductName());
+        var studentGroup = new StudentGroupModel(Faker.Random.Guid(), Faker.Commerce.ProductName());
 
         Context.StudentGroups.Add(studentGroup);
         await Context.SaveChangesAsync();

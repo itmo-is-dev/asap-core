@@ -16,7 +16,7 @@ public class CreateSubjectTests : CoreDatabaseTestBase
     public async Task HandleAsync_ShouldCreateSubject()
     {
         // Arrange
-        var command = new CreateSubject.Command(Fixture.Faker.Commerce.ProductName());
+        var command = new CreateSubject.Command(Faker.Commerce.ProductName());
         var handler = new CreateSubjectHandler(PersistenceContext);
 
         // Act

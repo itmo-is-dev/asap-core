@@ -16,11 +16,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="Itmo.Dev.Platform.Kafka" Version="1.0.45" />
-    <PackageVersion Include="Itmo.Dev.Platform.Logging" Version="1.0.45" />
-    <PackageVersion Include="Itmo.Dev.Platform.Postgres" Version="1.0.45" />
-    <PackageVersion Include="Itmo.Dev.Platform.Testing" Version="1.0.45" />
-    <PackageVersion Include="Itmo.Dev.Platform.YandexCloud" Version="1.0.45" />
+    <PackageVersion Include="Itmo.Dev.Platform.Kafka" Version="1.1.81" />
+    <PackageVersion Include="Itmo.Dev.Platform.Logging" Version="1.0.81" />
+    <PackageVersion Include="Itmo.Dev.Platform.Postgres" Version="1.1.81" />
+    <PackageVersion Include="Itmo.Dev.Platform.Testing" Version="1.0.81" />
+    <PackageVersion Include="Itmo.Dev.Platform.YandexCloud" Version="1.0.81" />
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.10" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />

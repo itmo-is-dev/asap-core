@@ -17,9 +17,9 @@ public class CreateUserTests : CoreDatabaseTestBase
     {
         // Arrange
         var command = new CreateUser.Command(
-            Fixture.Faker.Name.FirstName(),
-            Fixture.Faker.Internet.UserName(),
-            Fixture.Faker.Name.LastName());
+            Faker.Name.FirstName(),
+            Faker.Internet.UserName(),
+            Faker.Name.LastName());
 
         var handler = new CreateUserHandler(PersistenceContext);
 
