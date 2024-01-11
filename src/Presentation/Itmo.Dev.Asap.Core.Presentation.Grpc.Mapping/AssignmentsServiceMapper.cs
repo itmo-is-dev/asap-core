@@ -45,4 +45,6 @@ internal static partial class AssignmentsServiceMapper
         this UpdateGroupAssignmentDeadlines.Response.Success response);
 
     public static partial GroupAssignment MapToProto(this GroupAssignmentDto groupAssignment);
+
+    public static partial Assignment MapToProto(this AssignmentDto assignment);
 }

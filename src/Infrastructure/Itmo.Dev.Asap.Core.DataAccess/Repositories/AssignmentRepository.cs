@@ -35,6 +35,15 @@ public class AssignmentRepository : RepositoryBase<Assignment, AssignmentModel>,
             queryable = queryable.Where(x => query.SubjectCourseIds.Contains(x.SubjectCourseId));
         }
 
+        if (query.Names is not [])
+        {
+            string[] patterns = query.Names.Select(x => $"%{x}%").ToArray();
+
+            queryable = queryable.Where(assignment =>
+                patterns.Any(pattern => EF.Functions.ILike(assignment.Title, pattern))
+                || patterns.Any(pattern => EF.Functions.ILike(assignment.ShortName, pattern)));
+        }
+
         if (query.OrderByOrder is not null)
         {
             queryable = query.OrderByOrder.Value switch
