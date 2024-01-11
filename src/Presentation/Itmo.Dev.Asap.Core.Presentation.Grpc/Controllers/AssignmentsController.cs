@@ -115,7 +115,8 @@ public class AssignmentsController : AssignmentsService.AssignmentsServiceBase
     {
         var query = new QueryAssignments.Query(
             request.Ids.Select(x => x.ToGuid()),
-            request.Names);
+            request.Names,
+            request.SubjectCourseIds.Select(x => x.ToGuid()));
 
         QueryAssignments.Response response = await _mediator.Send(query, context.CancellationToken);
 

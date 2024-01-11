@@ -20,7 +20,8 @@ internal class QueryAssignmentsHandler : IRequestHandler<Query, Response>
     {
         var query = AssignmentQuery.Build(x => x
             .WithIds(request.Ids)
-            .WithNames(request.Names));
+            .WithNames(request.Names)
+            .WithSubjectCourseIds(request.SubjectCourseIds));
 
         AssignmentDto[] assignments = await _context.Assignments
             .QueryAsync(query, cancellationToken)
