@@ -231,4 +231,15 @@ public class SubmissionController : SubmissionService.SubmissionServiceBase
             PageToken = response.PageToken is null ? null : JsonConvert.SerializeObject(response.PageToken),
         };
     }
+
+    public override async Task<QueryInfoResponse> QueryInfo(QueryInfoRequest request, ServerCallContext context)
+    {
+        var query = new QuerySubmissionInfo.Query(request.SubmissionIds.Select(x => x.ToGuid()));
+        QuerySubmissionInfo.Response response = await _mediator.Send(query, context.CancellationToken);
+
+        return new QueryInfoResponse
+        {
+            Submissions = { response.Submissions.Select(x => x.MapToProtoModel()) },
+        };
+    }
 }

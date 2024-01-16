@@ -3,6 +3,7 @@ option csharp_namespace = "Itmo.Dev.Asap.Core.SubmissionWorkflow";
 
 import "models/submission_rate.proto";
 import "models/submission.proto";
+import "models/submission_state.proto";
 
 service SubmissionWorkflowService {
   rpc Approved(ApprovedRequest) returns (ApprovedResponse);

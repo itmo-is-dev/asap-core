@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.Submissions.Commands;
+using Itmo.Dev.Asap.Core.Application.Dto.Study;
 using Itmo.Dev.Asap.Core.Application.Dto.Submissions;
 using Itmo.Dev.Asap.Core.Models;
 using Itmo.Dev.Asap.Core.Submissions;
@@ -39,6 +40,30 @@ internal static partial class SubmissionServiceMapper
     [MapProperty(nameof(SubmissionRateDto.Id), nameof(SubmissionRate.SubmissionId))]
     public static partial SubmissionRate MapFrom(this SubmissionRateDto rateDto);
 
+    public static SubmissionInfo MapToProtoModel(this SubmissionInfoDto submission)
+    {
+        return new SubmissionInfo
+        {
+            SubmissionId = submission.Id.ToString(),
+            CreatedAt = Timestamp.FromDateTimeOffset(submission.CreatedAt),
+            State = submission.State.MapToProtoModel(),
+        };
+    }
+
     private static Timestamp ToTimestamp(DateTime dateTime)
         => Timestamp.FromDateTime(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
+
+    private static SubmissionState MapToProtoModel(this SubmissionStateDto state)
+    {
+        return state switch
+        {
+            SubmissionStateDto.Active => SubmissionState.Active,
+            SubmissionStateDto.Inactive => SubmissionState.Inactive,
+            SubmissionStateDto.Deleted => SubmissionState.Deleted,
+            SubmissionStateDto.Completed => SubmissionState.Completed,
+            SubmissionStateDto.Reviewed => SubmissionState.Reviewed,
+            SubmissionStateDto.Banned => SubmissionState.Banned,
+            _ => throw new ArgumentOutOfRangeException(nameof(state), state, null),
+        };
+    }
 }
