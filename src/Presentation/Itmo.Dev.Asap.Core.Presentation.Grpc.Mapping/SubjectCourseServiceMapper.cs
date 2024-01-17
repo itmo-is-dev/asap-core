@@ -4,6 +4,8 @@ using Itmo.Dev.Asap.Core.Application.Contracts.Study.Queues.Queries;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Queries;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Commands;
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourses.Queries;
+using Itmo.Dev.Asap.Core.Application.Dto.SubjectCourses;
+using Itmo.Dev.Asap.Core.Models;
 using Itmo.Dev.Asap.Core.SubjectCourses;
 using Riok.Mapperly.Abstractions;
 using System.Text.Json;
@@ -45,6 +47,8 @@ internal static partial class SubjectCourseServiceMapper
 
     [MapProperty(nameof(GetSubmissionsQueue.Response.SubmissionsQueue), nameof(GetStudentGroupQueueResponse.Queue))]
     public static partial GetStudentGroupQueueResponse MapFrom(this GetSubmissionsQueue.Response response);
+
+    public static partial SubjectCourse MapToProtoModel(this SubjectCourseDto subjectCourse);
 
     private static TimeSpan MapToTimeSpan(Duration duration)
         => duration.ToTimeSpan();
