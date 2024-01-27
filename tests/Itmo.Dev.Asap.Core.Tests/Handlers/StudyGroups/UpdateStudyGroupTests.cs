@@ -23,7 +23,7 @@ public class UpdateStudyGroupTests : CoreDatabaseTestBase
             .Select(x => x.Id)
             .FirstAsync();
 
-        string name = Fixture.Faker.Commerce.ProductName();
+        string name = Faker.Commerce.ProductName();
 
         var publisher = new Mock<IPublisher>();
 

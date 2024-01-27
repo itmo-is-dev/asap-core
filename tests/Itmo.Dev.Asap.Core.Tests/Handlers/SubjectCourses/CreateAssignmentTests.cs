@@ -27,11 +27,11 @@ public class CreateAssignmentTests : CoreDatabaseTestBase
 
         var command = new CreateAssignment.Command(
             subjectCourse.Id,
-            Fixture.Faker.Commerce.ProductName(),
-            Fixture.Faker.Commerce.ProductName(),
-            Fixture.Faker.Random.Int(10, 20),
-            Fixture.Faker.Random.Double(0, 10),
-            Fixture.Faker.Random.Double(10, 20));
+            Faker.Commerce.ProductName(),
+            Faker.Commerce.ProductName(),
+            Faker.Random.Int(10, 20),
+            Faker.Random.Double(0, 10),
+            Faker.Random.Double(10, 20));
 
         var handler = new CreateAssignmentHandler(PersistenceContext, publisher.Object);
 

@@ -5,6 +5,8 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 import "models/submission.proto";
 import "models/submission_rate.proto";
+import "models/submission_info.proto";
+import "models/submission_state.proto";
 
 service SubmissionService {
   rpc Activate(ActivateRequest) returns (ActivateResponse);
@@ -17,6 +19,7 @@ service SubmissionService {
   rpc Rate(RateRequest) returns (RateResponse);
   rpc Update(UpdateRequest) returns (UpdateResponse);
   rpc QueryFirstCompletedSubmission(QueryFirstCompletedSubmissionRequest) returns (QueryFirstCompletedSubmissionResponse);
+  rpc QueryInfo(QueryInfoRequest) returns (QueryInfoResponse);
 }
 
 message ActivateRequest {
@@ -163,4 +166,12 @@ message QueryFirstCompletedSubmissionResponse {
     string user_id = 2;
     string assignment_id = 3;
   }
+}
+
+message QueryInfoRequest {
+  repeated string submission_ids = 1;
+}
+
+message QueryInfoResponse {
+  repeated SubmissionInfo submissions = 1;
 }

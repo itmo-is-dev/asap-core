@@ -1,4 +1,6 @@
 using Itmo.Dev.Asap.Core.Application.Contracts.Study.SubjectCourseGroups.Commands;
+using Itmo.Dev.Asap.Core.Application.Dto.SubjectCourses;
+using Itmo.Dev.Asap.Core.Models;
 using Itmo.Dev.Asap.Core.SubjectCourseGroups;
 using Riok.Mapperly.Abstractions;
 
@@ -13,4 +15,6 @@ internal static partial class SubjectCourseGroupServiceMapper
 
     [MapProperty(nameof(BulkCreateSubjectCourseGroups.Response.Groups), nameof(CreateResponse.SubjectCourseGroups))]
     public static partial CreateResponse MapFrom(this BulkCreateSubjectCourseGroups.Response response);
+
+    public static partial SubjectCourseGroup MapToProto(this SubjectCourseGroupDto dto);
 }

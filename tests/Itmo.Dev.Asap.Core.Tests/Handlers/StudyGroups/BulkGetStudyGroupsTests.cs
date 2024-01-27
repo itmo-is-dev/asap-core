@@ -18,7 +18,7 @@ public class BulkGetStudyGroupsTests : CoreDatabaseTestBase
         // Arrange
         List<Guid> ids = await Context.StudentGroups
             .OrderBy(x => x.Id)
-            .Take(Fixture.Faker.Random.Int(10, 20))
+            .Take(Faker.Random.Int(10, 20))
             .Select(x => x.Id)
             .ToListAsync();
 

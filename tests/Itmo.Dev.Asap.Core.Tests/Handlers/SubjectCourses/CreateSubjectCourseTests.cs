@@ -28,7 +28,7 @@ public class CreateSubjectCourseTests : CoreDatabaseTestBase
         var command = new CreateSubjectCourse.Command(
             string.Empty,
             subject.Id,
-            Fixture.Faker.Commerce.ProductName(),
+            Faker.Commerce.ProductName(),
             SubmissionStateWorkflowTypeDto.ReviewWithDefense);
 
         var handler = new CreateSubjectCourseHandler(PersistenceContext, Mock.Of<IPublisher>());
@@ -57,7 +57,7 @@ public class CreateSubjectCourseTests : CoreDatabaseTestBase
         var command = new CreateSubjectCourse.Command(
             string.Empty,
             subject.Id,
-            Fixture.Faker.Commerce.ProductName(),
+            Faker.Commerce.ProductName(),
             SubmissionStateWorkflowTypeDto.ReviewWithDefense);
 
         var handler = new CreateSubjectCourseHandler(PersistenceContext, publisher.Object);

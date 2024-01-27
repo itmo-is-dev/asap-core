@@ -110,4 +110,19 @@ public class AssignmentsController : AssignmentsService.AssignmentsServiceBase
             _ => throw new RpcException(new Status(StatusCode.Internal, "Operation finished with unexpected result")),
         };
     }
+
+    public override async Task<QueryResponse> Query(QueryRequest request, ServerCallContext context)
+    {
+        var query = new QueryAssignments.Query(
+            request.Ids.Select(x => x.ToGuid()),
+            request.Names,
+            request.SubjectCourseIds.Select(x => x.ToGuid()));
+
+        QueryAssignments.Response response = await _mediator.Send(query, context.CancellationToken);
+
+        return new QueryResponse
+        {
+            Assignments = { response.Assignments.Select(x => x.MapToProto()) },
+        };
+    }
 }

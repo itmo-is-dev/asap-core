@@ -134,4 +134,15 @@ public class SubjectCourseController : SubjectCourseService.SubjectCourseService
             MentorIds = { response.MentorIds.Select(x => x.ToString()) },
         };
     }
+
+    public override async Task<QueryResponse> Query(QueryRequest request, ServerCallContext context)
+    {
+        var query = new QuerySubjectCourses.Query(request.SubjectCourseIds.Select(x => x.ToGuid()));
+        QuerySubjectCourses.Response response = await _mediator.Send(query, context.CancellationToken);
+
+        return new QueryResponse
+        {
+            SubjectCourses = { response.SubjectCourses.Select(x => x.MapToProtoModel()) },
+        };
+    }
 }

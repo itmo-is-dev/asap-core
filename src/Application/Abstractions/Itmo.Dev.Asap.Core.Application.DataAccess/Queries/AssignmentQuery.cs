@@ -7,4 +7,5 @@ namespace Itmo.Dev.Asap.Core.Application.DataAccess.Queries;
 public partial record AssignmentQuery(
     IReadOnlyCollection<Guid> Ids,
     IReadOnlyCollection<Guid> SubjectCourseIds,
+    string[] Names,
     OrderDirection? OrderByOrder);

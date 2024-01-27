@@ -27,8 +27,8 @@ public class BulkCreateSubjectCourseGroupTests : CoreDatabaseTestBase
             .Where(x => x.Assignments.Count != 0)
             .FirstAsync();
 
-        StudentGroupModel[] studentGroups = Enumerable.Range(0, Fixture.Faker.Random.Int(10, 15))
-            .Select(_ => new StudentGroupModel(Fixture.Faker.Random.Guid(), Fixture.Faker.Commerce.ProductName()))
+        StudentGroupModel[] studentGroups = Enumerable.Range(0, Faker.Random.Int(10, 15))
+            .Select(_ => new StudentGroupModel(Faker.Random.Guid(), Faker.Commerce.ProductName()))
             .ToArray();
 
         Context.StudentGroups.AddRange(studentGroups);
@@ -67,10 +67,10 @@ public class BulkCreateSubjectCourseGroupTests : CoreDatabaseTestBase
             .Where(x => x.Assignments.Count != 0)
             .FirstAsync();
 
-        int groupCount = Fixture.Faker.Random.Int(10, 15);
+        int groupCount = Faker.Random.Int(10, 15);
 
         StudentGroupModel[] studentGroups = Enumerable.Range(0, groupCount)
-            .Select(_ => new StudentGroupModel(Fixture.Faker.Random.Guid(), Fixture.Faker.Commerce.ProductName()))
+            .Select(_ => new StudentGroupModel(Faker.Random.Guid(), Faker.Commerce.ProductName()))
             .ToArray();
 
         Context.StudentGroups.AddRange(studentGroups);

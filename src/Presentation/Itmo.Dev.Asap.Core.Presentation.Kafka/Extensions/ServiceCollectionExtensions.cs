@@ -13,49 +13,40 @@ public static class ServiceCollectionExtensions
     {
         const string configurationKey = "Presentation:Kafka:Producers";
 
-        string host = configuration.GetSection("Presentation:Kafka:Host").Get<string>() ?? string.Empty;
-
         collection.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
 
-        collection.AddKafkaProducer<AssignmentCreatedKey, AssignmentCreatedValue>(selector => selector
-            .SerializeKeyWithProto()
-            .SerializeValueWithProto()
-            .UseNamedOptionsConfiguration(
-                "AssignmentCreated",
-                configuration.GetSection($"{configurationKey}:AssignmentCreated"),
-                c => c.WithHost(host)));
-
-        collection.AddKafkaProducer<QueueUpdatedKey, QueueUpdatedValue>(selector => selector
-            .SerializeKeyWithProto()
-            .SerializeValueWithProto()
-            .UseNamedOptionsConfiguration(
-                "QueueUpdated",
-                configuration.GetSection($"{configurationKey}:QueueUpdated"),
-                c => c.WithHost(host)));
-
-        collection.AddKafkaProducer<SubjectCourseCreatedKey, SubjectCourseCreatedValue>(selector => selector
-            .SerializeKeyWithProto()
-            .SerializeValueWithProto()
-            .UseNamedOptionsConfiguration(
-                "SubjectCourseCreated",
-                configuration.GetSection($"{configurationKey}:SubjectCourseCreated"),
-                c => c.WithHost(host)));
-
-        collection.AddKafkaProducer<SubjectCoursePointsUpdatedKey, SubjectCoursePointsUpdatedValue>(selector => selector
-            .SerializeKeyWithProto()
-            .SerializeValueWithProto()
-            .UseNamedOptionsConfiguration(
-                "SubjectCoursePointsUpdated",
-                configuration.GetSection($"{configurationKey}:SubjectCoursePointsUpdated"),
-                c => c.WithHost(host)));
-
-        collection.AddKafkaProducer<StudentPointsUpdatedKey, StudentPointsUpdatedValue>(selector => selector
-            .SerializeKeyWithProto()
-            .SerializeValueWithProto()
-            .UseNamedOptionsConfiguration(
-                "StudentPointsUpdated",
-                configuration.GetSection($"{configurationKey}:StudentPointsUpdated"),
-                c => c.WithHost(host)));
+        collection.AddKafka(builder => builder
+            .ConfigureOptions(b => b.BindConfiguration("Presentation:Kafka"))
+            .AddProducer<AssignmentCreatedKey, AssignmentCreatedValue>(selector => selector
+                .SerializeKeyWithProto()
+                .SerializeValueWithProto()
+                .UseNamedOptionsConfiguration(
+                    "AssignmentCreated",
+                    configuration.GetSection($"{configurationKey}:AssignmentCreated")))
+            .AddProducer<QueueUpdatedKey, QueueUpdatedValue>(selector => selector
+                .SerializeKeyWithProto()
+                .SerializeValueWithProto()
+                .UseNamedOptionsConfiguration(
+                    "QueueUpdated",
+                    configuration.GetSection($"{configurationKey}:QueueUpdated")))
+            .AddProducer<SubjectCourseCreatedKey, SubjectCourseCreatedValue>(selector => selector
+                .SerializeKeyWithProto()
+                .SerializeValueWithProto()
+                .UseNamedOptionsConfiguration(
+                    "SubjectCourseCreated",
+                    configuration.GetSection($"{configurationKey}:SubjectCourseCreated")))
+            .AddProducer<SubjectCoursePointsUpdatedKey, SubjectCoursePointsUpdatedValue>(selector => selector
+                .SerializeKeyWithProto()
+                .SerializeValueWithProto()
+                .UseNamedOptionsConfiguration(
+                    "SubjectCoursePointsUpdated",
+                    configuration.GetSection($"{configurationKey}:SubjectCoursePointsUpdated")))
+            .AddProducer<StudentPointsUpdatedKey, StudentPointsUpdatedValue>(selector => selector
+                .SerializeKeyWithProto()
+                .SerializeValueWithProto()
+                .UseNamedOptionsConfiguration(
+                    "StudentPointsUpdated",
+                    configuration.GetSection($"{configurationKey}:StudentPointsUpdated"))));
 
         return collection;
     }
